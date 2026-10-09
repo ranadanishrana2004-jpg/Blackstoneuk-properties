@@ -105,6 +105,7 @@ async function createDriver(): Promise<Driver> {
       connectionString: url,
       max: 8,
       idleTimeoutMillis: 30_000,
+      connectionTimeoutMillis: 15_000, // tolerates a serverless database waking from idle
       ssl: needsSsl(url) ? { rejectUnauthorized: false } : undefined,
     });
     return {
