@@ -30,7 +30,7 @@ export function siteUrl(): string {
 }
 
 export function contactEmail(): string {
-  return clean(process.env.CONTACT_EMAIL) || 'info@bsukrecruitment.com';
+  return clean(process.env.CONTACT_EMAIL) || 'info@bsukproperties.com';
 }
 
 /** Read on the server and passed to client components as props. */
