@@ -19,7 +19,7 @@ services:
       - key: DATABASE_URL # Neon connection string (secret)
         sync: false
       - key: SITE_URL
-        value: https://bsukproperties.com
+        value: https://www.bsukproperties.com
       - key: ADMIN_EMAIL
         sync: false
       - key: ADMIN_PASSWORD

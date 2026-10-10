@@ -62,5 +62,5 @@ network response; email delivery is not an exactly-once guarantee across long ou
 Legacy failed/skipped enquiries can be retried manually (their historical per-recipient
 state is unknown, so a previously delivered legacy acknowledgement could be resent).
 
-Custom domain: `https://bsukproperties.com`; `www` redirects to the apex through Render.
+Custom domain: `https://www.bsukproperties.com`; the apex redirects to `www` through Render. `SITE_URL` matches this primary URL so canonical links and the sitemap use the final destination.
 Keep GoDaddy mailbox MX, SPF, DKIM and DMARC records separate from website A/CNAME changes.
