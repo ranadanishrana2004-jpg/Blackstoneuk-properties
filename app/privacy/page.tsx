@@ -45,10 +45,11 @@ export default function Page() {
 
       <h2>Who we share it with</h2>
       <p>
-        We use trusted service providers to run the website and send email: Render (hosting and
-        database) and Brevo (email delivery). They process data on our instructions. If your enquiry
-        is about Halal home finance, we may need to share the details you provide with a regulated
-        finance provider or adviser, and we will tell you before we do so.
+        We use trusted service providers to run the website and send email: Render (website
+        hosting), Neon (database storage) and Brevo (email delivery). They process data on our
+        instructions. If your enquiry is about Halal home finance, we may need to share the details
+        you provide with a regulated finance provider or adviser, and we will tell you before we do
+        so.
       </p>
 
       <h2>How long we keep it</h2>

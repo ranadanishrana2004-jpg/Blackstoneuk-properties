@@ -314,7 +314,7 @@ export function TeamWorkspace() {
               <div className="team-filters">
                 <input
                   aria-label="Search enquiries"
-                  placeholder="Search name, email, postcode or type"
+                  placeholder="Search reference, name, email, postcode or type"
                   value={search}
                   onChange={(e) => setSearch(e.target.value)}
                 />
@@ -524,7 +524,28 @@ export function TeamWorkspace() {
                     'General enquiry'}
                 </dd>
                 <dt>Notification email</dt>
-                <dd>{selected.email_status}</dd>
+                <dd>
+                  {selected.email_status}
+                  {['failed', 'skipped', 'pending'].includes(selected.email_status) && (
+                    <button
+                      type="button"
+                      className="text-link"
+                      disabled={busy}
+                      onClick={async () => {
+                        if (
+                          await run(
+                            () => post({ action: 'retry-email', id: selected.id }),
+                            'Notification retry queued',
+                          )
+                        ) {
+                          setSelected(null);
+                        }
+                      }}
+                    >
+                      Retry notifications
+                    </button>
+                  )}
+                </dd>
               </dl>
               <p className="enquiry-message">{selected.message}</p>
               <Choice

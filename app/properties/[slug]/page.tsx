@@ -21,6 +21,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       );
     return {
       title: `${p.name}, ${p.location}`,
+      ...(p.sample ? { robots: { index: false, follow: true } } : {}),
       description,
       alternates: { canonical: `/properties/${p.slug}` },
       openGraph: { title: p.name, description, type: 'website', images: [{ url: p.image }] },
@@ -80,10 +81,12 @@ export default async function Page({ params }: Props) {
 
   return (
     <>
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd).replace(/</g, '\\u003c') }}
-      />
+      {!property.sample && (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd).replace(/</g, '\\u003c') }}
+        />
+      )}
       <PropertyDetail property={property} contact={getContact()} />
     </>
   );

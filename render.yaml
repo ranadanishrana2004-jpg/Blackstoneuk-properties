@@ -11,13 +11,15 @@ services:
     startCommand: npm run start
     healthCheckPath: /api/health
     autoDeploy: true
+    domains:
+      - bsukproperties.com
     envVars:
       - key: NODE_VERSION
         value: 22
       - key: DATABASE_URL # Neon connection string (secret)
         sync: false
       - key: SITE_URL
-        value: https://bsuk-properties.onrender.com # change to https://www.bsukproperties.com once the domain is connected
+        value: https://bsukproperties.com
       - key: ADMIN_EMAIL
         sync: false
       - key: ADMIN_PASSWORD
@@ -29,6 +31,6 @@ services:
       - key: NOTIFY_EMAIL
         value: info@bsukproperties.com
       - key: CONTACT_PHONE
-        value: "+44 800 043 7867"
+        value: '+44 800 043 7867'
       - key: BREVO_API_KEY # added later, once the Brevo key exists (secret)
         sync: false

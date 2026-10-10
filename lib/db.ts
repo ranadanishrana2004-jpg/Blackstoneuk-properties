@@ -39,6 +39,16 @@ CREATE TABLE IF NOT EXISTS listings (
   data TEXT NOT NULL,
   updated_at BIGINT NOT NULL
 );
+CREATE TABLE IF NOT EXISTS mail_outbox (
+  enquiry_id TEXT NOT NULL REFERENCES enquiries(id) ON DELETE CASCADE,
+  audience TEXT NOT NULL,
+  status TEXT NOT NULL DEFAULT 'pending',
+  attempts INTEGER NOT NULL DEFAULT 0,
+  next_attempt BIGINT NOT NULL DEFAULT 0,
+  lease_until BIGINT NOT NULL DEFAULT 0,
+  lease_token TEXT,
+  PRIMARY KEY (enquiry_id, audience)
+);
 CREATE TABLE IF NOT EXISTS rate_limits (
   key TEXT PRIMARY KEY,
   count INTEGER NOT NULL,
@@ -107,6 +117,13 @@ async function createDriver(): Promise<Driver> {
       idleTimeoutMillis: 30_000,
       connectionTimeoutMillis: 15_000, // tolerates a serverless database waking from idle
       ssl: needsSsl(url) ? { rejectUnauthorized: false } : undefined,
+    });
+    // Idle-client errors are events, outside request-level try/catch. pg removes
+    // the broken client itself; never log the client/connection credentials.
+    pool.on('error', (error: Error & { code?: string }) => {
+      console.error('Database background connection interrupted', {
+        code: error.code || 'UNKNOWN',
+      });
     });
     return {
       query: async (sql, params) => (await pool.query(sql, params as unknown[])).rows,

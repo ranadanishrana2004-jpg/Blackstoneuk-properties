@@ -28,10 +28,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       changeFrequency: 'weekly' as const,
       priority: path === '' ? 1 : 0.7,
     })),
-    ...items.map((p) => ({
-      url: `${base}/properties/${p.slug}`,
-      changeFrequency: 'daily' as const,
-      priority: 0.8,
-    })),
+    ...items
+      .filter((p) => !p.sample)
+      .map((p) => ({
+        url: `${base}/properties/${p.slug}`,
+        changeFrequency: 'daily' as const,
+        priority: 0.8,
+      })),
   ];
 }

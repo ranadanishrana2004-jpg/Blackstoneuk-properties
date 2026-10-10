@@ -49,3 +49,18 @@ created from `ADMIN_EMAIL` / `ADMIN_PASSWORD` on first start; change the passwor
    photography you have the rights to use (delete or edit them in `/manage`).
 5. Have the privacy notice, terms and Halal-finance wording reviewed by a solicitor and confirm the
    FCA position before promoting mortgage services.
+
+# Reliability and delivery
+
+Enquiries and their two notification jobs are saved atomically. The existing web
+process checks the PostgreSQL outbox every 30 seconds: no additional Render worker,
+cron service, Redis or database is required. Recipient delivery states are separate;
+successful recipients are not resent during normal retries. Failed deliveries retry
+up to eight times with backoff. The team workspace offers a manual retry afterwards.
+Provider idempotency headers additionally reduce duplicate delivery after an ambiguous
+network response; email delivery is not an exactly-once guarantee across long outages.
+Legacy failed/skipped enquiries can be retried manually (their historical per-recipient
+state is unknown, so a previously delivered legacy acknowledgement could be resent).
+
+Custom domain: `https://bsukproperties.com`; `www` redirects to the apex through Render.
+Keep GoDaddy mailbox MX, SPF, DKIM and DMARC records separate from website A/CNAME changes.

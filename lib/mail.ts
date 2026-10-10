@@ -32,6 +32,7 @@ type Message = {
   html: string;
   text: string;
   replyTo?: { email: string; name?: string };
+  deliveryKey?: string;
 };
 
 export async function sendMail(message: Message): Promise<MailResult> {
@@ -52,16 +53,13 @@ export async function sendMail(message: Message): Promise<MailResult> {
         subject: message.subject,
         htmlContent: message.html,
         textContent: message.text,
+        ...(message.deliveryKey ? { headers: { idempotencyKey: message.deliveryKey } } : {}),
         ...(message.replyTo ? { replyTo: message.replyTo } : {}),
       }),
       signal: AbortSignal.timeout(8000),
     });
     if (!response.ok) {
-      console.error(
-        'Brevo rejected the email',
-        response.status,
-        await response.text().catch(() => ''),
-      );
+      console.error('Brevo rejected the email', response.status);
       return 'failed';
     }
     return 'sent';
@@ -90,9 +88,13 @@ export type EnquiryMail = {
   postcode: string;
   message: string;
   propertyName?: string;
+  deliveryKey?: string;
 };
 
-export async function sendEnquiryEmails(enquiry: EnquiryMail): Promise<MailResult> {
+export async function sendEnquiryEmail(
+  enquiry: EnquiryMail,
+  audience: 'team' | 'customer',
+): Promise<MailResult> {
   const label = kindLabel(enquiry.kind);
   const rows: [string, string][] = [
     ['Reference', enquiry.reference],
@@ -110,19 +112,21 @@ export async function sendEnquiryEmails(enquiry: EnquiryMail): Promise<MailResul
     )
     .join('');
 
-  const team = await sendMail({
-    to: { email: process.env.NOTIFY_EMAIL || contactEmail(), name: COMPANY_NAME },
-    replyTo: { email: enquiry.email, name: enquiry.name },
-    subject: `New ${label.toLowerCase()} — ${enquiry.name} (${enquiry.reference})`,
-    html: layout(
-      `New ${label.toLowerCase()}`,
-      `<table role="presentation" cellpadding="0" cellspacing="0">${table}</table>
+  if (audience === 'team')
+    return sendMail({
+      deliveryKey: enquiry.deliveryKey,
+      to: { email: process.env.NOTIFY_EMAIL || contactEmail(), name: COMPANY_NAME },
+      replyTo: { email: enquiry.email, name: enquiry.name },
+      subject: `New ${label.toLowerCase()} — ${enquiry.name} (${enquiry.reference})`,
+      html: layout(
+        `New ${label.toLowerCase()}`,
+        `<table role="presentation" cellpadding="0" cellspacing="0">${table}</table>
        <p style="margin:18px 0 6px;color:#6b6b6b;font-size:13px">Message</p>
        <p style="margin:0;font-size:14px;line-height:1.6;white-space:pre-wrap">${escapeHtml(enquiry.message)}</p>
        <p style="margin:22px 0 0"><a href="${escapeHtml(siteUrl())}/manage" style="color:#7a5c1e">Open the team workspace</a></p>`,
-    ),
-    text: `${rows.map(([k, v]) => `${k}: ${v}`).join('\n')}\n\n${enquiry.message}\n\n${siteUrl()}/manage`,
-  });
+      ),
+      text: `${rows.map(([k, v]) => `${k}: ${v}`).join('\n')}\n\n${enquiry.message}\n\n${siteUrl()}/manage`,
+    });
 
   const contact = getContact();
   const reach = [contact.phone && `Phone: ${contact.phone}`, `Email: ${contact.email}`]
@@ -132,7 +136,8 @@ export async function sendEnquiryEmails(enquiry: EnquiryMail): Promise<MailResul
     enquiry.kind === 'halal-mortgage'
       ? '<p style="font-size:13px;color:#6b6b6b;line-height:1.6">This is an initial enquiry only. It is not a finance application, quotation or approval, and no product has been recommended.</p>'
       : '';
-  const customer = await sendMail({
+  return sendMail({
+    deliveryKey: enquiry.deliveryKey,
     to: { email: enquiry.email, name: enquiry.name },
     replyTo: { email: contact.email, name: COMPANY_NAME },
     subject: `We have received your enquiry (${enquiry.reference})`,
@@ -145,7 +150,4 @@ export async function sendEnquiryEmails(enquiry: EnquiryMail): Promise<MailResul
     ),
     text: `Thank you ${enquiry.name}. We have received your ${label.toLowerCase()}. Your reference is ${enquiry.reference}.\n${reach}`,
   });
-
-  if (team === 'skipped') return 'skipped';
-  return team === 'sent' && customer !== 'failed' ? 'sent' : 'failed';
 }

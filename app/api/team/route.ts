@@ -7,8 +7,10 @@ import {
   jsonError,
   orderProperties,
   requireUser,
+  changePasswordAndRevokeSessions,
 } from '@/lib/server';
 import { passwordSchema, propertySchema, userSchema } from '@/lib/validation';
+import { drainOutbox } from '@/lib/outbox';
 
 const PAGE_SIZE = 25;
 const STATUSES = ['new', 'contacted', 'closed'];
@@ -33,7 +35,7 @@ export async function GET(request: Request) {
     if (search) {
       values.push('%' + search.replace(/[\\%_]/g, (c) => '\\' + c) + '%');
       where.push(
-        `(name ILIKE $${values.length} OR email ILIKE $${values.length} OR kind ILIKE $${values.length} OR postcode ILIKE $${values.length})`,
+        `(name ILIKE $${values.length} OR email ILIKE $${values.length} OR kind ILIKE $${values.length} OR postcode ILIKE $${values.length} OR ('BSUK-' || UPPER(SUBSTRING(id, 1, 8))) ILIKE $${values.length})`,
       );
     }
     const clause = where.length ? 'WHERE ' + where.join(' AND ') : '';
@@ -97,6 +99,29 @@ export async function POST(request: Request) {
     }
 
     switch (body.action) {
+      case 'retry-email': {
+        if (typeof body.id !== 'string') return jsonError('Invalid enquiry.');
+        const enquiry = await queryOne<{ email_status: string }>(
+          'SELECT email_status FROM enquiries WHERE id=$1',
+          [body.id],
+        );
+        if (!enquiry) return jsonError('Enquiry not found.', 404);
+        if (enquiry.email_status === 'sent') return Response.json({ saved: true });
+        await query(
+          `INSERT INTO mail_outbox (enquiry_id,audience)
+          VALUES ($1,'team'),($1,'customer') ON CONFLICT DO NOTHING`,
+          [body.id],
+        );
+        await query(
+          `UPDATE mail_outbox SET attempts=0,next_attempt=0
+          WHERE enquiry_id=$1 AND status <> 'sent' AND lease_until <= $2`,
+          [body.id, Date.now()],
+        );
+        await query("UPDATE enquiries SET email_status='queued' WHERE id=$1", [body.id]);
+        await audit(user.email, 'retry-email', body.id);
+        await drainOutbox(2).catch(() => console.error('Email retry queued.'));
+        return Response.json({ saved: true });
+      }
       case 'enquiry-update': {
         if (typeof body.id !== 'string') return jsonError('Invalid update.');
         const status = body.status;
@@ -194,10 +219,7 @@ export async function POST(request: Request) {
           return jsonError(next.error.issues[0]?.message || 'Choose a stronger password.');
         if (!(await authenticate(user.email, current)))
           return jsonError('Your current password is incorrect.', 403);
-        await query('UPDATE users SET password_hash = $1 WHERE id = $2', [
-          await hashPassword(next.data),
-          user.id,
-        ]);
+        await changePasswordAndRevokeSessions(request, user.id, await hashPassword(next.data));
         await audit(user.email, 'change-password');
         return Response.json({ saved: true });
       }

@@ -1,6 +1,6 @@
-import { query, queryOne } from '@/lib/db';
-import { kindLabel, sendEnquiryEmails } from '@/lib/mail';
-import { allProperties, jsonError, rateLimit, sameOrigin } from '@/lib/server';
+import { query } from '@/lib/db';
+import { drainOutbox } from '@/lib/outbox';
+import { jsonError, rateLimit, sameOrigin } from '@/lib/server';
 import { CONSENT_VERSION, enquirySchema } from '@/lib/validation';
 
 const MAX_BODY = 16_000;
@@ -39,11 +39,14 @@ export async function POST(request: Request) {
     }
 
     const reference = 'BSUK-' + data.requestId.slice(0, 8).toUpperCase();
-    const inserted = await query(
-      `INSERT INTO enquiries
-         (id, kind, name, email, phone, postcode, message, property_id, status, created_at, consent_version)
-       VALUES ($1,$2,$3,$4,$5,$6,$7,$8,'new',$9,$10)
-       ON CONFLICT (id) DO NOTHING RETURNING id`,
+    await query(
+      `WITH saved AS (INSERT INTO enquiries
+         (id, kind, name, email, phone, postcode, message, property_id, status, created_at, consent_version, email_status)
+       VALUES ($1,$2,$3,$4,$5,$6,$7,$8,'new',$9,$10,'queued')
+       ON CONFLICT (id) DO NOTHING RETURNING id)
+       INSERT INTO mail_outbox (enquiry_id, audience)
+       SELECT saved.id, audience FROM saved CROSS JOIN (VALUES ('team'), ('customer')) AS recipients(audience)
+       ON CONFLICT DO NOTHING`,
       [
         data.requestId,
         data.kind,
@@ -58,30 +61,8 @@ export async function POST(request: Request) {
       ],
     );
 
-    // Only email on the first save, so a retried request cannot send duplicates.
-    if (inserted.length) {
-      let propertyName: string | undefined;
-      if (data.propertyId) {
-        const property = (await allProperties(true)).find((p) => p.id === data.propertyId);
-        propertyName = property?.name;
-      }
-      const result = await sendEnquiryEmails({
-        reference,
-        kind: data.kind,
-        name: data.name,
-        email: data.email,
-        phone: data.phone,
-        postcode: data.postcode,
-        message: data.message,
-        propertyName,
-      }).catch(() => 'failed' as const);
-      await queryOne('UPDATE enquiries SET email_status = $1 WHERE id = $2', [
-        result,
-        data.requestId,
-      ]);
-      if (result === 'failed')
-        console.error(`Email notification failed for ${reference} (${kindLabel(data.kind)})`);
-    }
+    // Persistence succeeds independently of delivery. The in-process worker retries failures.
+    await drainOutbox(2).catch(() => console.error('Enquiry queued for email retry.'));
 
     return Response.json({ reference, saved: true }, { status: 201 });
   } catch (error) {

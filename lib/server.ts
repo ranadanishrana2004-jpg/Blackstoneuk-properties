@@ -155,6 +155,19 @@ export async function destroySession(request: Request) {
   if (token) await query('DELETE FROM sessions WHERE token_hash = $1', [sha256(token)]);
 }
 
+export async function changePasswordAndRevokeSessions(
+  request: Request,
+  userId: string,
+  hash: string,
+) {
+  const token = readCookie(request, SESSION_COOKIE);
+  await query(
+    `WITH changed AS (UPDATE users SET password_hash=$3 WHERE id=$1 RETURNING id)
+    DELETE FROM sessions WHERE user_id IN (SELECT id FROM changed) AND token_hash <> $2`,
+    [userId, token ? sha256(token) : '', hash],
+  );
+}
+
 /** Guard for team endpoints. Mutating requests must also come from this site. */
 export async function requireUser(
   request: Request,
