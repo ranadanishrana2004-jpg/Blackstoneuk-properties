@@ -43,11 +43,11 @@ export const SavedContext = createContext<{ saved: string[]; toggle: (id: string
 export function Brand() {
   return (
     <Link className="brand" href="/" aria-label="Blackstone Uk property Ltd home">
-      <BrandMark />
+      <span className="client-brand-badge">
+        <BrandMark />
+      </span>
       <span className="client-brand-type">
-        <span className="client-wordmark" aria-hidden="true">
-          <img src="/images/blackstone-brand-reference.jpeg" alt="" width="1142" height="1600" />
-        </span>
+        <span className="client-brand-name">BLACKSTONE</span>
         <small>UK PROPERTY LTD</small>
       </span>
     </Link>

@@ -36,13 +36,58 @@
   mix-blend-mode: multiply;
 }
 .client-brand-type small {
-  display: block;
-  margin-top: 5px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 9px;
   font:
-    9px/1.4 Arial,
+    600 8px/1.4 Arial,
     sans-serif;
   letter-spacing: 0.24em;
-  color: var(--green);
+  color: #947138;
+}
+.client-brand-type small::before,
+.client-brand-type small::after {
+  content: '';
+  height: 1px;
+  flex: 1;
+  background: #b99a5780;
+}
+.client-brand-name {
+  display: block;
+  font:
+    23px/1 Georgia,
+    serif;
+  letter-spacing: 0.085em;
+  color: var(--text);
+}
+.client-brand-badge {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 61px;
+  height: 67px;
+  flex-shrink: 0;
+  background: #151711;
+  border: 1px solid #a88a45;
+  box-shadow: 0 2px 6px #0002;
+}
+.client-brand-badge::after {
+  content: '';
+  position: absolute;
+  inset: 4px;
+  border: 1px solid #b99a5766;
+  pointer-events: none;
+}
+.client-brand-badge .client-monogram {
+  width: 40px;
+}
+.client-brand-badge .client-monogram img {
+  filter: grayscale(1) contrast(3) invert(1);
+  mix-blend-mode: screen;
+}
+.dark .client-brand-type small {
+  color: #d4b779;
 }
 .dark .client-monogram img,
 .dark .client-wordmark img {
@@ -152,8 +197,18 @@
     width: 151px;
   }
   .client-brand-type small {
-    font-size: 8px;
+    font-size: 7px;
     letter-spacing: 0.18em;
+  }
+  .client-brand-name {
+    font-size: 18px;
+  }
+  .client-brand-badge {
+    width: 48px;
+    height: 54px;
+  }
+  .client-brand-badge .client-monogram {
+    width: 32px;
   }
 }
 @media (prefers-reduced-motion: reduce) {
