@@ -35,6 +35,7 @@ import { Toaster } from '@/components/ui/sonner';
 import { toast } from 'sonner';
 import { formatPrice, isAvailable, statusLabel, type Property } from '@/lib/properties';
 import { telHref, type ContactInfo } from '@/lib/site';
+import { BrandMark, BrandMotion } from '@/components/brand-motion';
 export const SavedContext = createContext<{ saved: string[]; toggle: (id: string) => void }>({
   saved: [],
   toggle: () => {},
@@ -42,11 +43,12 @@ export const SavedContext = createContext<{ saved: string[]; toggle: (id: string
 export function Brand() {
   return (
     <Link className="brand" href="/" aria-label="Blackstone Uk property Ltd home">
-      <span className="monogram">
-        B<span>UK</span>
-      </span>
-      <span className="brand-type">
-        BLACKSTONE<small>UK PROPERTY LTD</small>
+      <BrandMark />
+      <span className="client-brand-type">
+        <span className="client-wordmark" aria-hidden="true">
+          <img src="/images/blackstone-brand-reference.jpeg" alt="" width="1142" height="1600" />
+        </span>
+        <small>UK PROPERTY LTD</small>
       </span>
     </Link>
   );
@@ -98,6 +100,7 @@ export function Shell({ children, contact }: { children: React.ReactNode; contac
   ];
   return (
     <SavedContext.Provider value={{ saved, toggle }}>
+      <BrandMotion />
       <a href="#main" className="skip">
         Skip to content
       </a>

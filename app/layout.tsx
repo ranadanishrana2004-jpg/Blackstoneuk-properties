@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from 'next';
 import './globals.css';
 import './pages.css';
+import './brand-motion.css';
 import { Shell } from '@/components/property-platform';
 import { COMPANY_NAME, getContact, siteUrl } from '@/lib/site';
 
