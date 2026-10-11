@@ -365,13 +365,14 @@ textarea:focus-visible {
   background: var(--surface);
   color: var(--text);
   padding: 30px;
+  overflow-y: auto;
 }
 .mobile-sheet nav {
   display: flex;
   flex-direction: column;
-  gap: 20px;
-  margin-top: 35px;
-  font: 25px Georgia;
+  gap: 10px;
+  margin-top: 28px;
+  font: 23px Georgia;
 }
 .hero {
   padding-top: 58px;
@@ -1467,5 +1468,63 @@ footer p {
   .reveal:not(.in-view) {
     opacity: 1;
     transform: none;
+  }
+}
+
+/* Tactile mobile navigation, using the active theme palette. */
+.mobile-sheet nav a {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  min-height: 50px;
+  padding: 11px 14px;
+  border: 1px solid color-mix(in srgb, var(--rose) 20%, transparent);
+  border-radius: 6px;
+  background: linear-gradient(
+    135deg,
+    var(--surface),
+    color-mix(in srgb, var(--rose) 7%, var(--surface))
+  );
+  box-shadow: 0 3px 0 color-mix(in srgb, var(--rose) 18%, transparent);
+  text-decoration: none;
+  transition:
+    background 180ms ease,
+    border-color 180ms ease,
+    color 180ms ease,
+    transform 180ms ease,
+    box-shadow 180ms ease;
+}
+.mobile-sheet nav a::after {
+  content: '\2192';
+  font: 20px Georgia;
+  color: var(--rose);
+  transition: transform 180ms ease;
+}
+.mobile-sheet nav a:hover,
+.mobile-sheet nav a:focus-visible {
+  color: var(--rose);
+  border-color: var(--rose);
+  background: color-mix(in srgb, var(--rose) 12%, var(--surface));
+  transform: translateY(-2px);
+  box-shadow: 0 5px 0 color-mix(in srgb, var(--rose) 24%, transparent);
+}
+.mobile-sheet nav a:hover::after,
+.mobile-sheet nav a:focus-visible::after {
+  transform: translateX(3px);
+}
+.mobile-sheet nav a:focus-visible {
+  outline: 2px solid var(--rose);
+  outline-offset: 3px;
+}
+.mobile-sheet nav a:active {
+  transform: translateY(2px);
+  background: color-mix(in srgb, var(--rose) 20%, var(--surface));
+  box-shadow: none;
+}
+@media (prefers-reduced-motion: reduce) {
+  .mobile-sheet nav a,
+  .mobile-sheet nav a::after {
+    transition: none;
   }
 }

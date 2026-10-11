@@ -157,9 +157,15 @@ export function Shell({ children, contact }: { children: React.ReactNode; contac
                       {name}
                     </Link>
                   ))}
-                  <Link href="/valuation">Book a valuation</Link>
-                  <Link href="/shortlist">Your shortlist</Link>
-                  <Link href="/contact">Contact us</Link>
+                  <Link href="/valuation" onClick={() => setMenu(false)}>
+                    Book a valuation
+                  </Link>
+                  <Link href="/shortlist" onClick={() => setMenu(false)}>
+                    Your shortlist
+                  </Link>
+                  <Link href="/contact" onClick={() => setMenu(false)}>
+                    Contact us
+                  </Link>
                 </nav>
               </SheetContent>
             </Sheet>
