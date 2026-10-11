@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from 'next';
 import './globals.css';
 import './pages.css';
 import './brand-motion.css';
+import './portal.css';
 import { Shell } from '@/components/property-platform';
 import { COMPANY_NAME, getContact, siteUrl } from '@/lib/site';
 
@@ -61,7 +62,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
     areaServed: 'GB',
   };
   return (
-    <html lang="en-GB" suppressHydrationWarning>
+    <html lang="en-GB" data-scroll-behavior="smooth" suppressHydrationWarning>
       <head>
         <script dangerouslySetInnerHTML={{ __html: themeScript }} />
         <script

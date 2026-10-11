@@ -3,6 +3,8 @@ import Link from 'next/link';
 import { useSearchParams, useRouter } from 'next/navigation';
 import { useEffect, useState, useContext, useRef } from 'react';
 import {
+  LayoutGrid,
+  List,
   Heart,
   BedDouble,
   Bath,
@@ -67,6 +69,7 @@ export function Catalog({
   const [price, setPrice] = useState(params.get('price') || 'any');
   const [type, setType] = useState(params.get('type') || 'all');
   const [sort, setSort] = useState('featured');
+  const [view, setView] = useState<'list' | 'grid'>('list');
   useEffect(() => {
     setQ(params.get('q') || '');
     setTenure(params.get('tenure') || 'all');
@@ -106,17 +109,30 @@ export function Catalog({
     router.replace(shortlist ? '/shortlist' : '/properties', { scroll: false });
   }
   return (
-    <main id="main">
-      <Intro
-        eyebrow={shortlist ? 'PERSONALLY SELECTED' : 'THE BLACKSTONE COLLECTION'}
-        title={shortlist ? 'Your favourites.' : 'Find a home.'}
-        emphasis={shortlist ? 'Your possibilities.' : 'Find your belonging.'}
-        text={
-          shortlist
-            ? 'Your shortlist is saved on this browser, ready for your next visit.'
-            : 'Explore distinctive homes to buy and rent. Search by the place, space and lifestyle that matter to you.'
-        }
-      />
+    <main id="main" className="portal-catalog">
+      <div className="container catalog-heading">
+        <nav className="breadcrumbs" aria-label="Breadcrumb">
+          <Link href="/">Home</Link>
+          <span>/</span>
+          {shortlist ? 'Saved homes' : 'Property search'}
+        </nav>
+        <span className="eyebrow">THE BLACKSTONE COLLECTION</span>
+        <h1>
+          {shortlist
+            ? 'Your saved homes'
+            : tenure === 'rent'
+              ? 'Properties to rent'
+              : tenure === 'buy'
+                ? 'Properties for sale'
+                : 'Find your next home'}
+          {q.trim() && !shortlist ? <em> in {q.trim()}</em> : '.'}
+        </h1>
+        <p>
+          {shortlist
+            ? 'Your favourites, saved on this browser for your next visit.'
+            : 'Choose your location, budget and the space you need.'}
+        </p>
+      </div>
       <section className="container catalog">
         <form
           className="catalog-filters"
@@ -187,6 +203,22 @@ export function Catalog({
           </button>
         </form>
         <div className="results-bar">
+          <div className="view-switch" role="group" aria-label="Property view">
+            <button
+              aria-label="List view"
+              aria-pressed={view === 'list'}
+              onClick={() => setView('list')}
+            >
+              <List size={18} />
+            </button>
+            <button
+              aria-label="Grid view"
+              aria-pressed={view === 'grid'}
+              onClick={() => setView('grid')}
+            >
+              <LayoutGrid size={18} />
+            </button>
+          </div>
           <p role="status">
             {`${filtered.length} ${filtered.length === 1 ? 'property' : 'properties'} to discover`}
           </p>
@@ -205,9 +237,9 @@ export function Catalog({
           />
         </div>
         {filtered.length ? (
-          <div className="property-grid">
+          <div className={view === 'list' ? 'property-results-list' : 'property-grid'}>
             {filtered.map((p) => (
-              <PropertyCard key={p.id} property={p} />
+              <PropertyCard key={p.id} property={p} detailed={view === 'list'} />
             ))}
           </div>
         ) : (
@@ -417,7 +449,9 @@ export function PropertyDetail({
     <main id="main" className="detail-page">
       <div className="container">
         <div className="breadcrumbs">
-          <Link href="/properties">The collection</Link>
+          <Link href={'/properties?tenure=' + p.tenure}>
+            ← {p.tenure === 'rent' ? 'Properties to rent' : 'Properties for sale'}
+          </Link>
           <span>/</span>
           {p.name}
         </div>
@@ -435,7 +469,7 @@ export function PropertyDetail({
             </span>
           </div>
         </div>
-        <div className="detail-gallery">
+        <div className={'detail-gallery ' + (p.images.length > 1 ? 'gallery-mosaic' : '')}>
           <img
             src={p.image}
             alt={p.sample ? p.name + ' — illustrative property' : p.name}
@@ -443,6 +477,22 @@ export function PropertyDetail({
             height={800}
             fetchPriority="high"
           />
+          {p.images.length > 1 && (
+            <div className="gallery-preview">
+              {p.images.slice(1, 3).map((src, i) => (
+                <button
+                  key={src + i}
+                  aria-label={'View photo ' + (i + 2)}
+                  onClick={() => {
+                    setIndex(i + 1);
+                    setGallery(true);
+                  }}
+                >
+                  <img src={src} alt={p.name + ' photo ' + (i + 2)} loading="lazy" />
+                </button>
+              ))}
+            </div>
+          )}
           {!isAvailable(p.status) && (
             <span className={'status-badge status-' + p.status}>
               {statusLabel(p.status, p.tenure)}
@@ -467,6 +517,14 @@ export function PropertyDetail({
             You can enquire about similar homes.
           </p>
         )}
+        <nav className="detail-navigation" aria-label="Property information">
+          <a href="#overview">Overview</a>
+          <a href="#key-information">Key information</a>
+          <a href="#features">Features</a>
+          <a href="#property-enquiry">
+            {p.sample ? 'Enquire about similar homes' : 'Arrange a viewing'} →
+          </a>
+        </nav>
         <div className="detail-columns">
           <div>
             <div className="detail-specs">
@@ -483,7 +541,7 @@ export function PropertyDetail({
                 {p.area.toLocaleString()} sq ft
               </span>
             </div>
-            <section className="detail-section">
+            <section className="detail-section" id="overview">
               <span className="eyebrow">A CLOSER LOOK</span>
               <h2>
                 A place to imagine
@@ -492,7 +550,7 @@ export function PropertyDetail({
               </h2>
               <p>{p.description}</p>
             </section>
-            <section className="detail-section">
+            <section className="detail-section" id="key-information">
               <h3>Key information</h3>
               <dl className="fact-grid">
                 {[
@@ -536,8 +594,8 @@ export function PropertyDetail({
                 </a>
               )}
             </section>
-            <section className="detail-section">
-              <h3>Thoughtfully considered details</h3>
+            <section className="detail-section" id="features">
+              <h3>Key features</h3>
               <div className="feature-list">
                 {p.features.map((f) => (
                   <span key={f}>
@@ -577,11 +635,13 @@ export function PropertyDetail({
               </div>
             </div>
           </div>
-          <EnquiryForm
-            kind="viewing"
-            propertyId={p.id}
-            heading={p.sample ? 'Enquire about similar homes.' : 'Arrange your private viewing.'}
-          />
+          <div id="property-enquiry" className="detail-enquiry">
+            <EnquiryForm
+              kind="viewing"
+              propertyId={p.id}
+              heading={p.sample ? 'Enquire about similar homes.' : 'Arrange your viewing.'}
+            />
+          </div>
         </div>
       </div>
       <Dialog open={gallery} onOpenChange={setGallery}>

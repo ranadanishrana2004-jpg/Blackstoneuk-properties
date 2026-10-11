@@ -14,9 +14,7 @@ import {
   House,
   KeyRound,
   Leaf,
-  ShieldCheck,
   Plus,
-  Check,
   Building2,
   Phone,
   MessageCircle,
@@ -359,7 +357,13 @@ export function SearchBox() {
     </div>
   );
 }
-export function PropertyCard({ property: p }: { property: Property }) {
+export function PropertyCard({
+  property: p,
+  detailed = false,
+}: {
+  property: Property;
+  detailed?: boolean;
+}) {
   const { saved, toggle } = useContext(SavedContext);
   return (
     <article className="property-card">
@@ -390,6 +394,10 @@ export function PropertyCard({ property: p }: { property: Property }) {
         </button>
       </div>
       <div className="property-info">
+        <div className="card-price">
+          <strong>{formatPrice(p)}</strong>
+          <small>{p.tenure === 'rent' ? 'To rent' : 'For sale'}</small>
+        </div>
         <div className="location">
           <MapPin size={13} />
           {p.location}
@@ -408,8 +416,11 @@ export function PropertyCard({ property: p }: { property: Property }) {
           </span>
           <span>{p.type}</span>
         </div>
+        {detailed && <p className="card-description">{p.description}</p>}
         <div className="property-bottom">
-          <strong>{formatPrice(p)}</strong>
+          <span className="card-agent">
+            BLACKSTONE <small>UK PROPERTY LTD</small>
+          </span>
           <Link
             href={'/properties/' + p.slug}
             className="round-link"
@@ -461,271 +472,196 @@ const services = [
 ];
 export function Home({ featured }: { featured: Property[] }) {
   return (
-    <main id="main">
-      <section className="hero container">
-        <div className="hero-copy">
-          <div className="eyebrow line">EXCEPTIONAL HOMES. PERSONAL CONNECTIONS.</div>
+    <main id="main" className="portal-home">
+      <section className="portal-hero container">
+        <img
+          className="portal-hero-photo"
+          src="/images/hero.webp"
+          alt="British home and landscaped gardens — illustrative photography"
+          fetchPriority="high"
+        />
+        <div className="portal-hero-shade" />
+        <div className="portal-hero-content">
+          <span className="eyebrow">A MORE PERSONAL APPROACH TO PROPERTY</span>
           <h1>
-            More than a home.
+            Find your place.
             <br />
-            Your <em>next chapter.</em>
+            <em>Love your next chapter.</em>
           </h1>
-          <p>
-            Some places just feel right. Discover thoughtfully selected homes and a more personal
-            property experience.
-          </p>
-          <div className="hero-buttons">
-            <Link className="button" href="/properties">
-              Explore our collection
+          <p>Homes to buy and rent. A team to help you move.</p>
+          <SearchBox />
+          <div className="hero-quick-links">
+            <Link href="/valuation">
+              What could your home be worth? <span>Book a valuation →</span>
             </Link>
-            <Link className="text-link" href="/selling">
-              Thinking of selling?
+            <Link href="/shortlist">
+              <Heart size={15} /> Your saved homes
             </Link>
           </div>
-          <div className="hero-proof">
-            <span className="tiny-monogram">B</span>
-            <span>
-              Distinctive properties.
-              <br />
-              <b>Thoughtfully matched.</b>
-            </span>
-          </div>
         </div>
-        <div className="hero-art">
-          <img
-            src="/images/hero.webp"
-            alt="Beautiful British home with a landscaped garden — illustrative brand image"
-            fetchPriority="high"
-          />
-          <div className="hero-image-shade" />
-          <div className="image-frame" />
-          <div className="image-story">
-            <span>THE BLACKSTONE PERSPECTIVE</span>
-            <h2>
-              A place to live.
-              <br />
-              <em>A place to belong.</em>
-            </h2>
-          </div>
-          <div className="hero-seal">
-            <Leaf size={22} />
-            <span>
-              ROOTED IN
-              <br />
-              WHAT MATTERS
-            </span>
-          </div>
-        </div>
-        <span className="hero-watermark" aria-hidden="true">
-          BLACKSTONE
-        </span>
       </section>
-      <div className="container search-container">
-        <SearchBox />
+      <div className="container portal-paths">
+        {[
+          ['Buy a home', 'Find a place of your own', '/properties?tenure=buy'],
+          ['Rent a home', 'Make your next move', '/properties?tenure=rent'],
+          ['Sell your property', 'Start with a valuation', '/valuation'],
+          ['Let your property', 'Support for landlords', '/landlords'],
+        ].map(([title, text, href], i) => (
+          <Link href={href} key={href}>
+            <span className="path-number">0{i + 1}</span>
+            <span>
+              <strong>{title}</strong>
+              <small>{text}</small>
+            </span>
+            <span aria-hidden="true">↗</span>
+          </Link>
+        ))}
       </div>
-      <div className="container promises">
-        <span>
-          <House />
-          Homes with character
-        </span>
-        <span>
-          <ShieldCheck />
-          Care at every step
-        </span>
-        <span>
-          <Leaf />
-          Halal mortgage enquiries
-        </span>
-        <span>
-          <KeyRound />
-          Your next chapter
-        </span>
-      </div>
-      <section className="section container" id="services">
+      <section className="container section portal-featured">
         <div className="section-heading reveal">
           <div>
-            <span className="eyebrow line">MADE FOR YOUR NEXT MOVE</span>
+            <span className="eyebrow line">THE BLACKSTONE COLLECTION</span>
             <h2>
-              Every chapter.
-              <br />
-              <em>Expertly considered.</em>
+              Homes worth <em>discovering.</em>
             </h2>
           </div>
-          <p>
-            Buying, selling, renting or letting.
-            <br />A complete property service, with you at its heart.
-          </p>
+          <Link className="text-link" href="/properties">
+            View all properties →
+          </Link>
         </div>
-        <div className="services-grid">
-          {services.map((s, i) => (
+        <div className="property-grid">
+          {featured.length ? (
+            featured.map((p) => <PropertyCard key={p.id} property={p} />)
+          ) : (
+            <p>
+              New properties are being added.{' '}
+              <Link href="/contact">Tell us what you are looking for.</Link>
+            </p>
+          )}
+        </div>
+      </section>
+      <section className="container portal-valuation reveal">
+        <div>
+          <span className="eyebrow">YOUR NEXT MOVE STARTS HERE</span>
+          <h2>
+            A fresh perspective.
+            <br />
+            <em>On your home's potential.</em>
+          </h2>
+          <p>
+            Thinking of selling or letting? Book a personal property valuation and discuss the next
+            step with our team.
+          </p>
+          <Link className="button" href="/valuation">
+            Book a property valuation →
+          </Link>
+        </div>
+        <img
+          src="/images/interior.webp"
+          alt="Light-filled living space — illustrative interior"
+          loading="lazy"
+        />
+      </section>
+      <section className="container section">
+        <div className="section-heading reveal">
+          <div>
+            <span className="eyebrow line">A HOME FOR EVERY CHAPTER</span>
+            <h2>
+              Search your <em>way.</em>
+            </h2>
+          </div>
+          <p>Start with the kind of home you have in mind.</p>
+        </div>
+        <div className="discovery-grid">
+          {[
+            ['Detached homes', 'Space to grow', 'Detached', 'country'],
+            ['Apartments', 'A different view of everyday', 'Apartment', 'apartment'],
+            ['Characterful terraces', 'A place with personality', 'Terraced', 'victorian'],
+          ].map(([title, text, type, image]) => (
             <Link
-              className="service-card reveal"
-              href={s.url}
-              key={s.label}
-              style={{ '--delay': i * 70 + 'ms' } as React.CSSProperties}
+              className="discovery-card reveal"
+              key={type}
+              href={'/properties?' + new URLSearchParams({ tenure: 'buy', type }).toString()}
             >
-              <div className="service-photo">
-                <img src={s.image} alt={s.label + ' with Blackstone'} loading="lazy" />
-                <span className="service-icon">
-                  <s.icon size={20} />
-                </span>
-              </div>
-              <div className="service-copy">
-                <span className="eyebrow">
-                  0{i + 1} / {s.label}
-                </span>
-                <h3>{s.title}</h3>
-                <p>{s.text}</p>
-                <span className="service-link">
-                  Explore {s.label.toLowerCase()}
-                  <span className="service-plus">
-                    <Plus size={17} />
-                  </span>
-                </span>
+              <img
+                src={'/images/' + image + '.webp'}
+                alt={title + ' — illustrative photography'}
+                loading="lazy"
+              />
+              <div>
+                <small>{text}</small>
+                <h3>
+                  {title} <span>↗</span>
+                </h3>
               </div>
             </Link>
           ))}
         </div>
-        <Link className="halal-banner reveal" href="/halal-mortgages">
-          <div className="halal-symbol">
-            <Leaf size={34} />
-          </div>
-          <div>
-            <span className="eyebrow">HOME FINANCE. ALIGNED WITH YOUR VALUES.</span>
-            <h3>
-              Halal mortgages. <em>A considered way home.</em>
-            </h3>
-            <p>
-              We only offer Halal mortgage enquiries. Start a conversation about your home-finance
-              needs.
-            </p>
-          </div>
-          <span className="button green-light">Explore Halal mortgages</span>
-        </Link>
       </section>
-      <section className="collection-section">
+      <section className="portal-support">
         <div className="container section">
           <div className="section-heading reveal">
             <div>
-              <span className="eyebrow line">THE PROPERTY COLLECTION</span>
+              <span className="eyebrow line">MORE THAN A PROPERTY SEARCH</span>
               <h2>
-                Some places are
-                <br />
-                <em>worth discovering.</em>
+                Every move.<em> Made simpler.</em>
               </h2>
             </div>
-            <Link className="text-link" href="/properties">
-              Explore all properties
+          </div>
+          <div className="portal-tools">
+            <Link href="/halal-mortgages" className="portal-tool halal-tool reveal">
+              <Leaf />
+              <span className="eyebrow">ALIGNED WITH YOUR VALUES</span>
+              <h3>Halal mortgages</h3>
+              <p>
+                We only offer Halal mortgage enquiries. Talk to us about your home-finance needs.
+              </p>
+              <span className="text-link">Explore Halal home finance →</span>
+            </Link>
+            <Link href="/stamp-duty" className="portal-tool reveal">
+              <House />
+              <span className="eyebrow">PLAN YOUR MOVE</span>
+              <h3>Stamp duty calculator</h3>
+              <p>Explore the potential stamp duty cost of your next property purchase.</p>
+              <span className="text-link">Calculate stamp duty →</span>
+            </Link>
+            <Link href="/contact" className="portal-tool reveal">
+              <MessageCircle />
+              <span className="eyebrow">PERSONAL SUPPORT</span>
+              <h3>Let's find your next home</h3>
+              <p>Tell us what matters to you. Our team can help you take the next step.</p>
+              <span className="text-link">Speak to the team →</span>
             </Link>
           </div>
-          <div className="property-grid">
-            {featured.length ? (
-              featured.map((p) => <PropertyCard key={p.id} property={p} />)
-            ) : (
-              <p>
-                New properties are being added.{' '}
-                <Link href="/contact">Tell us what you are looking for</Link> and we will be in
-                touch as soon as something suitable is available.
-              </p>
-            )}
-          </div>
         </div>
       </section>
-      <section className="section container about-split">
-        <div className="about-image reveal">
-          <img src="/images/interior.webp" alt="A beautifully considered interior" loading="lazy" />
-          <div className="floating-note">
-            <span className="eyebrow">THE DIFFERENCE IS PERSONAL</span>
-            <p>
-              Good property.
-              <br />
-              <em>Great relationships.</em>
-            </p>
-          </div>
-        </div>
-        <div className="about-copy reveal">
-          <span className="eyebrow line">BLACKSTONE UK PROPERTY LTD</span>
-          <h2>
-            Property is personal.
-            <br />
-            <em>So are we.</em>
-          </h2>
-          <p>
-            Behind every property is a person, a plan and a possibility. We take the time to
-            understand all three.
-          </p>
-          <p>
-            From your first conversation to your next set of keys, our approach is simple:
-            thoughtful presentation, clear communication and genuine care for your move.
-          </p>
-          <div className="values-list">
-            <span>
-              <Check size={17} />A service shaped around you
-            </span>
-            <span>
-              <Check size={17} />
-              Clear, considered communication
-            </span>
-            <span>
-              <Check size={17} />
-              Support beyond the first conversation
-            </span>
-          </div>
-          <Link className="button secondary" href="/about">
-            Meet the Blackstone approach
-          </Link>
-        </div>
-      </section>
-      <section className="editorial-band reveal">
-        <div className="container">
-          <span className="eyebrow">WHERE LIFE HAPPENS</span>
-          <h2>
-            The morning light.
-            <br />
-            The familiar street.
-            <br />
-            <em>The feeling of home.</em>
-          </h2>
-          <Link className="button" href="/properties">
-            Find your next address
-          </Link>
-        </div>
-      </section>
-      <section className="section container steps-section">
+      <section className="container section" id="services">
         <div className="section-heading reveal">
           <div>
-            <span className="eyebrow line">SIMPLICITY AT EVERY STEP</span>
+            <span className="eyebrow line">WITH YOU, FROM THE START</span>
             <h2>
-              Your move.
-              <br />
-              <em>Beautifully supported.</em>
+              Your property.<em> Our personal attention.</em>
             </h2>
           </div>
-          <p>A clear path from possibility to a new beginning.</p>
+          <Link href="/about" className="text-link">
+            Get to know Blackstone →
+          </Link>
         </div>
-        <div className="steps-grid">
-          {[
-            [
-              '01',
-              'Let’s get to know you',
-              'Tell us what matters, what you need and where you want to go.',
-            ],
-            [
-              '02',
-              'Explore the possibilities',
-              'Discover properties and a service tailored to your next move.',
-            ],
-            [
-              '03',
-              'Take the next step',
-              'Arrange a viewing or valuation, with a team ready to help.',
-            ],
-          ].map(([n, h, p]) => (
-            <div className="reveal" key={n}>
-              <span className="step-number">{n}</span>
-              <h3>{h}</h3>
-              <p>{p}</p>
-            </div>
+        <div className="services-grid">
+          {services.map((s) => (
+            <Link className="service-card reveal" href={s.url} key={s.label}>
+              <div className="service-photo">
+                <img src={s.image} alt={s.label + ' with Blackstone'} loading="lazy" />
+              </div>
+              <div className="service-copy">
+                <span className="eyebrow">{s.label}</span>
+                <h3>{s.title}</h3>
+                <p>{s.text}</p>
+                <span className="service-link">
+                  Explore {s.label.toLowerCase()} <Plus size={17} />
+                </span>
+              </div>
+            </Link>
           ))}
         </div>
       </section>
