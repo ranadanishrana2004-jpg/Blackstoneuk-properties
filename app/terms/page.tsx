@@ -3,7 +3,7 @@ import { getContact } from '@/lib/site';
 export const dynamic = 'force-dynamic';
 export const metadata = {
   title: 'Website terms',
-  description: 'Terms of use for the Blackstone UK Property Ltd website.',
+  description: 'Terms of use for the Blackstone UK Properties Ltd website.',
   alternates: { canonical: '/terms' },
 };
 
@@ -17,10 +17,11 @@ export default function Page() {
 
       <h2>About this website</h2>
       <p>
-        This website is operated by {c.companyName}. By using it you agree to these terms. Property
-        details are provided in good faith for guidance and do not form part of any offer or
-        contract. Prices, availability and descriptions can change without notice, and you should
-        verify the details with us before making any decision.
+        This website is operated by {c.companyName}, registered in England and Wales under company
+        number {c.companyNumber}. By using it you agree to these terms. Property details are
+        provided in good faith for guidance and do not form part of any offer or contract. Prices,
+        availability and descriptions can change without notice, and you should verify the details
+        with us before making any decision.
       </p>
 
       <h2>Enquiries are not applications</h2>

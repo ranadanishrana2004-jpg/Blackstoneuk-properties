@@ -27,7 +27,7 @@ function Curtain() {
         </div>
         <div className="brand-curtain-signature">
           <span className="brand-curtain-name">BLACKSTONE</span>
-          <span className="brand-curtain-caption">UK PROPERTY LTD</span>
+          <span className="brand-curtain-caption">UK PROPERTIES LTD</span>
         </div>
         <span className="brand-curtain-tagline">A place to belong.</span>
       </div>

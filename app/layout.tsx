@@ -7,7 +7,7 @@ import { Shell } from '@/components/property-platform';
 import { COMPANY_NAME, getContact, siteUrl } from '@/lib/site';
 
 const description =
-  'Distinctive homes to buy and rent, personal valuations and Halal mortgage enquiries. Blackstone UK Property Ltd: a more personal approach to property.';
+  'Distinctive homes to buy and rent, personal valuations and Halal mortgage enquiries. Blackstone UK Properties Ltd: a more personal approach to property.';
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl()),
@@ -47,6 +47,12 @@ export default function Layout({ children }: { children: React.ReactNode }) {
     '@context': 'https://schema.org',
     '@type': 'RealEstateAgent',
     name: COMPANY_NAME,
+    legalName: COMPANY_NAME,
+    identifier: {
+      '@type': 'PropertyValue',
+      propertyID: 'Companies House company number',
+      value: contact.companyNumber,
+    },
     url: siteUrl(),
     email: contact.email,
     ...(contact.phone ? { telephone: contact.phone } : {}),

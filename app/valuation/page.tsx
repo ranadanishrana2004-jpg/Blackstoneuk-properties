@@ -5,7 +5,7 @@ import { getContact } from '@/lib/site';
 export const dynamic = 'force-dynamic';
 export const metadata = {
   title: 'Book a property valuation',
-  description: 'Request a personal property valuation from Blackstone UK Property Ltd.',
+  description: 'Request a personal property valuation from Blackstone UK Properties Ltd.',
   alternates: { canonical: '/valuation' },
 };
 

@@ -6,7 +6,7 @@ export const dynamic = 'force-dynamic';
 export const metadata = {
   title: 'Contact us',
   description:
-    'Speak to the Blackstone UK Property Ltd team about buying, selling, renting or letting.',
+    'Speak to the Blackstone UK Properties Ltd team about buying, selling, renting or letting.',
   alternates: { canonical: '/contact' },
 };
 

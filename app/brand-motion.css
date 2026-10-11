@@ -259,7 +259,7 @@ footer a:not(.brand):not(.button):focus-visible::after {
   backdrop-filter: blur(8px);
   color: var(--text);
   pointer-events: none;
-  animation: brand-curtain-cycle 1s ease both;
+  animation: brand-curtain-cycle 2s ease both;
 }
 .dark .brand-curtain {
   background: radial-gradient(ellipse at 50% 43%, #3a2834 0%, #221a20 65%, #1c2b25 140%);
@@ -310,7 +310,7 @@ footer a:not(.brand):not(.button):focus-visible::after {
   stroke-width: 2;
   stroke-linecap: round;
   stroke-dasharray: 100;
-  animation: brand-clock-turn 750ms linear both;
+  animation: brand-clock-turn 1500ms linear both;
 }
 .brand-clock .client-monogram {
   width: 58px;

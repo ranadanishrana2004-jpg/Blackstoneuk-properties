@@ -6,7 +6,7 @@ export const dynamic = 'force-dynamic';
 export const metadata = {
   title: 'Properties for sale and to rent',
   description:
-    'Browse homes to buy and rent with Blackstone UK Property Ltd. Filter by location, bedrooms, price and property type.',
+    'Browse homes to buy and rent with Blackstone UK Properties Ltd. Filter by location, bedrooms, price and property type.',
   alternates: { canonical: '/properties' },
 };
 

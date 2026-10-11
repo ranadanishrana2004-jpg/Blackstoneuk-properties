@@ -27,7 +27,7 @@ import {
 import { Checkbox } from '@/components/ui/checkbox';
 import { Choice, PropertyCard, CallToAction, SavedContext } from './property-platform';
 import { formatPrice, isAvailable, statusLabel, type Property } from '@/lib/properties';
-import { telHref, type ContactInfo } from '@/lib/site';
+import { COMPANY_NAME, COMPANY_NUMBER, telHref, type ContactInfo } from '@/lib/site';
 
 export function Intro({
   eyebrow,
@@ -736,11 +736,11 @@ const serviceContent: Record<
     ],
   },
   about: {
-    label: 'BLACKSTONE UK PROPERTY LTD',
+    label: 'BLACKSTONE UK PROPERTIES LTD',
     title: 'Built around property.',
     emphasis: 'Centred on people.',
     intro:
-      'We believe every move deserves care, clarity and a personal connection. That is the thinking behind Blackstone Uk property Ltd.',
+      'We believe every move deserves care, clarity and a personal connection. That is the thinking behind Blackstone UK Properties Ltd.',
     image: '/images/hero.webp',
     cta: 'Meet your next property partner',
     href: '/contact',
@@ -773,6 +773,17 @@ export function ServicePage({ type }: { type: string }) {
             <em>{s.emphasis}</em>
           </h1>
           <p>{s.intro}</p>
+          {type === 'about' && (
+            <div className="company-registration">
+              <span className="eyebrow">COMPANY INFORMATION</span>
+              <strong>{COMPANY_NAME}</strong>
+              <p>
+                Registered in England and Wales.
+                <br />
+                Company number: <b>{COMPANY_NUMBER}</b>
+              </p>
+            </div>
+          )}
           <Link href={s.href} className="button">
             {s.cta}
           </Link>
@@ -845,7 +856,7 @@ export function HalalPage({ contact }: { contact: ContactInfo }) {
             <AccordionItem value="one">
               <AccordionTrigger>Do you offer conventional mortgages?</AccordionTrigger>
               <AccordionContent>
-                No. Blackstone Uk property Ltd only accepts Halal mortgage enquiries.
+                No. Blackstone UK Properties Ltd only accepts Halal mortgage enquiries.
               </AccordionContent>
             </AccordionItem>
             <AccordionItem value="two">
@@ -896,7 +907,7 @@ export function ContactPage({
         emphasis={valuation ? 'next chapter look like?' : 'A new chapter tomorrow.'}
         text={
           valuation
-            ? 'Tell us about your home and your plans. Request a personal property valuation with Blackstone Uk property Ltd.'
+            ? 'Tell us about your home and your plans. Request a personal property valuation with Blackstone UK Properties Ltd.'
             : 'Buying, selling, renting or letting — tell us what you have in mind, and let’s take the next step together.'
         }
       />
@@ -930,6 +941,16 @@ export function ContactPage({
               )}
               {contact.hours && <li>{contact.hours}</li>}
             </ul>
+            {!valuation && (
+              <div className="company-registration">
+                <strong>{contact.companyName}</strong>
+                <p>
+                  Registered in England and Wales.
+                  <br />
+                  Company number: <b>{contact.companyNumber}</b>
+                </p>
+              </div>
+            )}
             <Link href="/halal-mortgages" className="text-link">
               Enquiring about Halal mortgages?
             </Link>

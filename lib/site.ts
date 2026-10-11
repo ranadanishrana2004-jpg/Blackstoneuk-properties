@@ -1,8 +1,8 @@
 /**
  * Central site configuration. Everything that differs between environments, or that the
- * business must confirm before launch (phone, address, company number, regulatory wording),
+ * business must confirm before launch (phone, address, regulatory wording),
  * comes from environment variables so it can be changed in Render without a code change.
- * Nothing here is invented: anything left unset is simply not displayed.
+ * Legal identity is taken from the client-supplied certificate. Optional details left unset are not displayed.
  */
 
 const clean = (value: string | undefined) => (value ?? '').trim();
@@ -23,7 +23,9 @@ export type ContactInfo = {
   financeStatement: string;
 };
 
-export const COMPANY_NAME = 'Blackstone UK Property Ltd';
+export const COMPANY_NAME = 'Blackstone UK Properties Ltd';
+// Company number supplied on the client's certificate of incorporation.
+export const COMPANY_NUMBER = '17493466';
 
 export function siteUrl(): string {
   return clean(process.env.SITE_URL).replace(/\/$/, '') || 'http://localhost:3000';
@@ -42,7 +44,7 @@ export function getContact(): ContactInfo {
     whatsapp: clean(process.env.WHATSAPP_NUMBER).replace(/[^\d]/g, ''),
     address: clean(process.env.OFFICE_ADDRESS),
     hours: clean(process.env.OPENING_HOURS),
-    companyNumber: clean(process.env.COMPANY_NUMBER),
+    companyNumber: COMPANY_NUMBER,
     registeredOffice: clean(process.env.REGISTERED_OFFICE),
     vatNumber: clean(process.env.VAT_NUMBER),
     icoNumber: clean(process.env.ICO_NUMBER),

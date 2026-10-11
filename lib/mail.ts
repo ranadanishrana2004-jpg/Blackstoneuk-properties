@@ -73,7 +73,7 @@ function layout(title: string, body: string): string {
   return `<!doctype html><html><body style="margin:0;background:#f4f1ec;font-family:Arial,Helvetica,sans-serif;color:#1c1c1c">
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0"><tr><td align="center" style="padding:24px 12px">
 <table role="presentation" width="600" cellpadding="0" cellspacing="0" style="max-width:600px;background:#ffffff;border-radius:6px;overflow:hidden">
-<tr><td style="background:#1c1c1c;color:#e8d9b5;padding:22px 28px;font-size:13px;letter-spacing:.18em">BLACKSTONE UK PROPERTY LTD</td></tr>
+<tr><td style="background:#1c1c1c;color:#e8d9b5;padding:22px 28px;font-size:13px;letter-spacing:.18em">BLACKSTONE UK PROPERTIES LTD</td></tr>
 <tr><td style="padding:28px"><h1 style="font:600 22px Georgia,serif;margin:0 0 16px">${escapeHtml(title)}</h1>${body}</td></tr>
 <tr><td style="padding:16px 28px;background:#faf8f4;font-size:12px;color:#6b6b6b">${escapeHtml(COMPANY_NAME)} · ${escapeHtml(siteUrl())}</td></tr>
 </table></td></tr></table></body></html>`;

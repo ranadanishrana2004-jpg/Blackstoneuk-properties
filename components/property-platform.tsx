@@ -40,13 +40,13 @@ export const SavedContext = createContext<{ saved: string[]; toggle: (id: string
 });
 export function Brand() {
   return (
-    <Link className="brand" href="/" aria-label="Blackstone Uk property Ltd home">
+    <Link className="brand" href="/" aria-label="Blackstone UK Properties Ltd home">
       <span className="client-brand-badge">
         <BrandMark />
       </span>
       <span className="client-brand-type">
         <span className="client-brand-name">BLACKSTONE</span>
-        <small>UK PROPERTY LTD</small>
+        <small>UK PROPERTIES LTD</small>
       </span>
     </Link>
   );
@@ -419,7 +419,7 @@ export function PropertyCard({
         {detailed && <p className="card-description">{p.description}</p>}
         <div className="property-bottom">
           <span className="card-agent">
-            BLACKSTONE <small>UK PROPERTY LTD</small>
+            BLACKSTONE <small>UK PROPERTIES LTD</small>
           </span>
           <Link
             href={'/properties/' + p.slug}

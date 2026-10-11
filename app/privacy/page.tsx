@@ -4,7 +4,7 @@ export const dynamic = 'force-dynamic';
 export const metadata = {
   title: 'Privacy notice',
   description:
-    'How Blackstone UK Property Ltd collects, uses and protects your personal information.',
+    'How Blackstone UK Properties Ltd collects, uses and protects your personal information.',
   alternates: { canonical: '/privacy' },
 };
 
