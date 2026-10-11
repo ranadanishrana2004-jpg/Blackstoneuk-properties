@@ -21,9 +21,15 @@ function Curtain() {
             <circle className="clock-track" cx="100" cy="100" r="94" />
             <circle className="clock-progress" cx="100" cy="100" r="94" pathLength="100" />
           </svg>
-          <BrandMark />
+          <span className="client-brand-badge">
+            <BrandMark />
+          </span>
         </div>
-        <span className="brand-curtain-caption">BLACKSTONE UK PROPERTY LTD</span>
+        <div className="brand-curtain-signature">
+          <span className="brand-curtain-name">BLACKSTONE</span>
+          <span className="brand-curtain-caption">UK PROPERTY LTD</span>
+        </div>
+        <span className="brand-curtain-tagline">A place to belong.</span>
       </div>
     </div>
   );
