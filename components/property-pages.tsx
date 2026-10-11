@@ -900,7 +900,7 @@ export function ContactPage({
   const params = useSearchParams();
   const kind = valuation ? 'valuation' : params.get('kind') === 'landlord' ? 'landlord' : 'general';
   return (
-    <main id="main">
+    <main id="main" className={valuation ? 'valuation-page container' : undefined}>
       <Intro
         eyebrow={valuation ? 'YOUR PROPERTY. A FRESH PERSPECTIVE.' : 'CONTACT BLACKSTONE'}
         title={valuation ? 'What could your' : 'A conversation today.'}
@@ -912,6 +912,7 @@ export function ContactPage({
         }
       />
       <section className="container contact-layout">
+        {valuation && <EnquiryForm kind={kind} heading="Tell us about your property." />}
         <div className="contact-editorial">
           <img src="/images/interior.webp" alt="Elegant home interior" />
           <div>
@@ -956,10 +957,7 @@ export function ContactPage({
             </Link>
           </div>
         </div>
-        <EnquiryForm
-          kind={kind}
-          heading={valuation ? 'Tell us about your property.' : 'How can we help?'}
-        />
+        {!valuation && <EnquiryForm kind={kind} heading="How can we help?" />}
       </section>
     </main>
   );

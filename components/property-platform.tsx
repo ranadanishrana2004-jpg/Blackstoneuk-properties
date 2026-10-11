@@ -250,11 +250,12 @@ export function Shell({ children, contact }: { children: React.ReactNode; contac
             ))}
         </div>
       </footer>
-      {(contact.phone || contact.whatsapp) && (
+      {(contact.phone || contact.whatsapp || contact.email) && (
         <div className="quick-contact" aria-label="Contact us quickly">
           {contact.whatsapp && (
             <a
               href={'https://wa.me/' + contact.whatsapp}
+              className="quick-whatsapp"
               target="_blank"
               rel="noopener noreferrer"
               aria-label="Chat on WhatsApp"
@@ -267,6 +268,16 @@ export function Shell({ children, contact }: { children: React.ReactNode; contac
             <a href={telHref(contact.phone)} aria-label={'Call ' + contact.phone}>
               <Phone size={20} />
               <span>Call</span>
+            </a>
+          )}
+          {contact.email && (
+            <a
+              className="quick-email"
+              href={'mailto:' + contact.email}
+              aria-label={'Email us at ' + contact.email}
+            >
+              <Mail size={20} />
+              <span>Email us</span>
             </a>
           )}
         </div>

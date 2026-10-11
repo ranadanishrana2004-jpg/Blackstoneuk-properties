@@ -753,7 +753,7 @@
   text-decoration: none;
   box-shadow: 0 8px 24px rgb(0 0 0 / 0.25);
 }
-.quick-contact a:first-child:not(:last-child) {
+.quick-contact a.quick-whatsapp {
   background: #1f8a4c;
   color: #fff;
 }
@@ -916,4 +916,103 @@
 .company-registration b {
   font-weight: 600;
   color: var(--text);
+}
+
+/* Direct contact actions share the site's rose and plum palette. */
+.quick-contact a.quick-email {
+  background: var(--rose);
+  color: var(--on-rose);
+}
+.quick-contact a {
+  min-height: 46px;
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+}
+.quick-contact a:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 28px #0003;
+}
+.quick-contact a:focus-visible {
+  outline: 2px solid var(--rose);
+  outline-offset: 4px;
+}
+.valuation-page {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  column-gap: 8%;
+  row-gap: 32px;
+  padding-top: 48px;
+  padding-bottom: 90px;
+  align-items: start;
+}
+.valuation-page > .page-intro {
+  grid-column: 1;
+  grid-row: 1;
+  width: 100%;
+  padding: 0;
+}
+.valuation-page .page-intro h1 {
+  font-size: clamp(38px, 3.8vw, 56px);
+}
+.valuation-page .page-intro > p {
+  margin-bottom: 0;
+}
+.valuation-page > .contact-layout {
+  display: contents;
+}
+.valuation-page .contact-editorial {
+  grid-column: 1;
+  grid-row: 2;
+}
+.valuation-page .contact-layout > .enquiry-card {
+  grid-column: 2;
+  grid-row: 1 / span 2;
+  width: 100%;
+}
+@media (max-width: 750px) {
+  .valuation-page {
+    grid-template-columns: minmax(0, 1fr);
+    padding-top: 30px;
+    padding-bottom: 60px;
+    gap: 26px;
+  }
+  .valuation-page .page-intro h1 {
+    font-size: clamp(35px, 7vw, 46px);
+    margin: 17px 0;
+  }
+  .valuation-page .page-intro > p {
+    font-size: 14px;
+  }
+  .valuation-page .contact-layout > .enquiry-card {
+    grid-column: 1;
+    grid-row: 2;
+  }
+  .valuation-page .contact-editorial {
+    grid-column: 1;
+    grid-row: 3;
+  }
+}
+@media (max-width: 520px) {
+  .quick-contact {
+    bottom: calc(12px + env(safe-area-inset-bottom, 0px));
+    gap: 8px;
+  }
+  .quick-contact a {
+    padding: 12px 10px;
+    font-size: 12px;
+    min-width: 0;
+  }
+  .quick-contact a svg {
+    flex-shrink: 0;
+    width: 18px;
+  }
+  footer {
+    padding-bottom: calc(80px + env(safe-area-inset-bottom, 0px));
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .quick-contact a {
+    transition: none;
+  }
 }
