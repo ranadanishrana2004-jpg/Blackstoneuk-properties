@@ -1,5 +1,5 @@
 'use client';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { toast } from 'sonner';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
 import { Dialog, DialogContent, DialogTitle, DialogDescription } from '@/components/ui/dialog';
@@ -120,9 +120,12 @@ export function TeamWorkspace() {
   const [edit, setEdit] = useState<Property | null>(null);
   const [passwordOpen, setPasswordOpen] = useState(false);
 
+  const loadSequence = useRef(0);
   const load = useCallback(async () => {
+    const sequence = ++loadSequence.current;
     const params = new URLSearchParams({ status, q: query, page: String(page) });
-    setDesk(await api<Desk>('/api/team?' + params.toString()));
+    const result = await api<Desk>('/api/team?' + params.toString());
+    if (sequence === loadSequence.current) setDesk(result);
   }, [status, query, page]);
 
   useEffect(() => {
@@ -188,8 +191,20 @@ export function TeamWorkspace() {
   }
 
   async function signOut() {
-    await fetch('/api/team/session', { method: 'DELETE' });
-    setDesk(null);
+    setBusy(true);
+    setError('');
+    try {
+      await api('/api/team/session', { method: 'DELETE' });
+      ++loadSequence.current;
+      setDesk(null);
+      setSelected(null);
+      setEdit(null);
+      setPasswordOpen(false);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Unable to sign out. Please try again.');
+    } finally {
+      setBusy(false);
+    }
   }
 
   async function saveProperty(e: React.FormEvent<HTMLFormElement>) {
@@ -234,7 +249,7 @@ export function TeamWorkspace() {
             <button className="button secondary" onClick={() => setPasswordOpen(true)}>
               Change password
             </button>
-            <button className="button secondary" onClick={signOut}>
+            <button className="button secondary" onClick={signOut} disabled={busy}>
               Sign out
             </button>
           </div>
@@ -372,8 +387,29 @@ export function TeamWorkspace() {
               </Table>
               {!desk.enquiries.length && (
                 <div className="empty-state">
-                  <h3>No enquiries here yet.</h3>
-                  <p>Submitted enquiries will appear in this workspace.</p>
+                  <h3>
+                    {query || status !== 'all'
+                      ? 'No matching enquiries.'
+                      : 'No enquiries here yet.'}
+                  </h3>
+                  <p>
+                    {query || status !== 'all'
+                      ? 'Try a different search or clear your filters.'
+                      : 'Submitted enquiries will appear in this workspace.'}
+                  </p>
+                  {(query || status !== 'all') && (
+                    <button
+                      className="button secondary"
+                      onClick={() => {
+                        setSearch('');
+                        setQuery('');
+                        setStatus('all');
+                        setPage(1);
+                      }}
+                    >
+                      Clear filters
+                    </button>
+                  )}
                 </div>
               )}
               {pages > 1 && (
@@ -995,6 +1031,7 @@ function TeamPanel({
                 {u.id !== desk.user.id && (
                   <button
                     className="text-link"
+                    disabled={busy}
                     onClick={() => {
                       if (confirm(`Remove ${u.name}? They will no longer be able to sign in.`)) {
                         onRun(
@@ -1013,7 +1050,7 @@ function TeamPanel({
         </TableBody>
       </Table>
       <form
-        className="enquiry-card"
+        className="enquiry-card enquiry-form team-member-form"
         onSubmit={async (e) => {
           e.preventDefault();
           const form = e.currentTarget;
@@ -1031,18 +1068,38 @@ function TeamPanel({
               }),
             'Team member added',
           );
-          if (ok) form.reset();
+          if (ok) {
+            form.reset();
+            setRole('staff');
+          }
         }}
       >
         <h3>Add a team member</h3>
+        <p className="team-help">
+          Give your colleague access to properties and enquiries. Choose Staff for day-to-day work.
+        </p>
         <div className="form-grid">
           <label>
             Full name
-            <input name="name" required minLength={2} maxLength={100} />
+            <input
+              name="name"
+              required
+              minLength={2}
+              maxLength={100}
+              placeholder="Full name"
+              autoComplete="off"
+            />
           </label>
           <label>
             Email
-            <input name="email" type="email" required maxLength={200} autoComplete="off" />
+            <input
+              name="email"
+              type="email"
+              required
+              maxLength={200}
+              autoComplete="off"
+              placeholder="colleague@example.com"
+            />
           </label>
           <label>
             Temporary password
@@ -1069,7 +1126,7 @@ function TeamPanel({
           At least 12 characters with upper-case, lower-case and a number.
         </p>
         <button className="button" disabled={busy}>
-          Add team member
+          {busy ? 'Adding team member?' : 'Add team member'}
         </button>
       </form>
     </>
