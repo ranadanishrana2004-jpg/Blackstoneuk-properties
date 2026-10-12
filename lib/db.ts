@@ -68,6 +68,12 @@ CREATE TABLE IF NOT EXISTS sessions (
   created_at BIGINT NOT NULL,
   expires_at BIGINT NOT NULL
 );
+CREATE TABLE IF NOT EXISTS password_resets (
+  user_id TEXT PRIMARY KEY REFERENCES users(id) ON DELETE CASCADE,
+  token_hash TEXT NOT NULL UNIQUE,
+  password_hash TEXT NOT NULL,
+  expires_at BIGINT NOT NULL
+);
 CREATE TABLE IF NOT EXISTS audit_log (
   id BIGSERIAL PRIMARY KEY,
   at BIGINT NOT NULL,

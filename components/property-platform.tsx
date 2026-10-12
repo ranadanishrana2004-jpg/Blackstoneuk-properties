@@ -256,7 +256,7 @@ export function Shell({ children, contact }: { children: React.ReactNode; contac
             ))}
         </div>
       </footer>
-      {path !== '/manage' && (contact.phone || contact.whatsapp || contact.email) && (
+      {!path.startsWith('/manage') && (contact.phone || contact.whatsapp || contact.email) && (
         <div className="quick-contact" aria-label="Contact us quickly">
           {contact.whatsapp && (
             <a

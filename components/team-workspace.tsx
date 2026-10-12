@@ -1,5 +1,7 @@
 'use client';
 import { useCallback, useEffect, useRef, useState } from 'react';
+import Link from 'next/link';
+import { PasswordField } from './password-field';
 import { toast } from 'sonner';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
 import { Dialog, DialogContent, DialogTitle, DialogDescription } from '@/components/ui/dialog';
@@ -210,7 +212,11 @@ export function TeamWorkspace() {
   async function saveProperty(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     if (!edit) return;
-    const property = { ...edit, slug: edit.slug || slugify(edit.name) };
+    const property = {
+      ...edit,
+      slug: slugify(edit.slug || edit.name),
+      features: edit.features.map((feature) => feature.trim()).filter(Boolean),
+    };
     if (property.tenure !== 'rent') delete property.deposit;
     if (await run(() => post({ action: 'save-property', property }))) setEdit(null);
   }
@@ -272,16 +278,16 @@ export function TeamWorkspace() {
             Email
             <input name="email" type="email" autoComplete="username" required maxLength={200} />
           </label>
-          <label>
-            Password
-            <input
-              name="password"
-              type="password"
-              autoComplete="current-password"
-              required
-              maxLength={200}
-            />
-          </label>
+          <PasswordField
+            label="Password"
+            name="password"
+            autoComplete="current-password"
+            required
+            maxLength={200}
+          />
+          <Link className="text-link forgot-password" href="/manage/reset-password">
+            Forgot password?
+          </Link>
           {error && (
             <p role="alert" className="form-error">
               {error}
@@ -677,7 +683,7 @@ export function TeamWorkspace() {
                     required
                     maxLength={100}
                     value={edit.slug}
-                    onChange={(e) => set('slug', slugify(e.target.value))}
+                    onChange={(e) => set('slug', e.target.value)}
                   />
                 </label>
                 <label>
@@ -855,15 +861,7 @@ export function TeamWorkspace() {
                 <textarea
                   rows={3}
                   value={edit.features.join('\n')}
-                  onChange={(e) =>
-                    set(
-                      'features',
-                      e.target.value
-                        .split('\n')
-                        .map((s) => s.trim())
-                        .filter(Boolean),
-                    )
-                  }
+                  onChange={(e) => set('features', e.target.value.split('\n'))}
                 />
               </label>
 

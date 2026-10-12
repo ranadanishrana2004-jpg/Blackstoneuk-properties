@@ -1196,3 +1196,51 @@
     width: 100%;
   }
 }
+
+.password-field {
+  margin: 20px 0;
+}
+.password-field > label {
+  margin: 0;
+}
+.password-control {
+  position: relative;
+}
+.password-control input {
+  padding-right: 52px !important;
+}
+.password-control > button {
+  position: absolute;
+  right: 4px;
+  top: 4px;
+  width: 44px;
+  height: calc(100% - 8px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--muted);
+  border-radius: 4px;
+}
+.password-control > button:hover {
+  background: var(--soft);
+  color: var(--rose);
+}
+.password-control > button:focus-visible {
+  outline: 2px solid var(--rose);
+}
+.forgot-password {
+  display: block;
+  width: fit-content;
+  margin: 12px 0 24px;
+}
+.team-workspace .login-card h1 {
+  font-size: 32px;
+  margin: 0;
+}
+.recovery-message {
+  padding: 16px;
+  border: 1px solid var(--line);
+  background: var(--soft);
+  line-height: 1.6;
+  border-radius: 6px;
+}
