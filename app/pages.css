@@ -43,7 +43,7 @@
   min-width: 160px;
 }
 .results-bar .choice > span {
-  font-size: 9px;
+  font-size: 11px;
 }
 .empty-state {
   text-align: center;
@@ -125,7 +125,7 @@
   align-items: center;
   gap: 10px;
   margin-top: 25px;
-  font-size: 12px;
+  font-size: 13px;
   color: var(--green);
 }
 .finance-grid {
@@ -169,7 +169,7 @@
   border-radius: 5px;
 }
 .finance-note p {
-  font-size: 12px;
+  font-size: 13px;
 }
 .enquiry-card {
   background: var(--surface);
@@ -193,13 +193,13 @@
 }
 .enquiry-form label,
 .login-card label {
-  font-size: 12px;
+  font-size: 13px;
   display: block;
   color: var(--text);
 }
 .enquiry-form label small {
   color: var(--muted);
-  font-size: 10px;
+  font-size: 12px;
 }
 .enquiry-form input,
 .enquiry-form textarea,
@@ -235,7 +235,7 @@
   border-color: var(--rose);
 }
 .consent-row label {
-  font-size: 11px;
+  font-size: 13px;
   line-height: 1.7;
   color: var(--muted);
 }
@@ -250,7 +250,7 @@
   font-size: 13px;
 }
 .form-footnote {
-  font-size: 10px;
+  font-size: 12px;
   line-height: 1.7;
   color: var(--muted);
 }
@@ -298,7 +298,7 @@
 .breadcrumbs {
   display: flex;
   gap: 13px;
-  font-size: 12px;
+  font-size: 13px;
   color: var(--muted);
   padding: 30px 0;
 }
@@ -317,7 +317,7 @@
   text-align: right;
 }
 .detail-title > div:last-child > span {
-  font-size: 12px;
+  font-size: 13px;
   color: var(--muted);
 }
 .detail-price {
@@ -387,14 +387,14 @@
   display: flex;
   align-items: center;
   gap: 9px;
-  font-size: 12px;
+  font-size: 13px;
 }
 .feature-list svg {
   color: var(--green);
 }
 .sample-alert {
   background: var(--soft);
-  font-size: 12px;
+  font-size: 13px;
   color: var(--muted);
   padding: 15px 20px;
   margin-top: 15px;
@@ -511,11 +511,11 @@
 }
 .team-workspace td small {
   display: block;
-  font-size: 11px;
+  font-size: 13px;
   color: var(--muted);
 }
 .status-chip {
-  font-size: 11px;
+  font-size: 13px;
   padding: 5px 10px;
   border: 1px solid var(--line);
   border-radius: 20px;
@@ -638,7 +638,7 @@
     gap: 10px;
   }
   .detail-specs span {
-    font-size: 12px;
+    font-size: 13px;
   }
   .feature-list {
     grid-template-columns: 1fr;
@@ -662,7 +662,7 @@
     font-size: 32px;
   }
   .dashboard-stats span {
-    font-size: 11px;
+    font-size: 13px;
   }
   .team-filters {
     flex-wrap: wrap;
@@ -689,7 +689,7 @@
   border-radius: 999px;
   background: var(--text);
   color: var(--bg);
-  font-size: 11px;
+  font-size: 13px;
   font-weight: 700;
   letter-spacing: 0.12em;
   text-transform: uppercase;
@@ -725,7 +725,7 @@
 }
 .footer-legal {
   padding-bottom: 28px;
-  font-size: 12px;
+  font-size: 13px;
   line-height: 1.6;
   opacity: 0.7;
 }
@@ -780,7 +780,7 @@
   margin: 14px 0;
 }
 .fact-grid dt {
-  font-size: 12px;
+  font-size: 13px;
   letter-spacing: 0.1em;
   text-transform: uppercase;
   color: var(--muted);
@@ -864,7 +864,7 @@
   margin: 0;
   display: grid;
   gap: 4px;
-  font-size: 12px;
+  font-size: 13px;
 }
 .image-grid img {
   width: 100%;
@@ -904,11 +904,11 @@
 }
 .company-registration .eyebrow {
   display: block;
-  font-size: 9px;
+  font-size: 11px;
   margin-bottom: 10px;
 }
 .company-registration p {
-  font-size: 12px;
+  font-size: 13px;
   color: var(--muted);
   margin: 0;
   line-height: 1.8;
@@ -1000,7 +1000,7 @@
   }
   .quick-contact a {
     padding: 12px 10px;
-    font-size: 12px;
+    font-size: 13px;
     min-width: 0;
   }
   .quick-contact a svg {

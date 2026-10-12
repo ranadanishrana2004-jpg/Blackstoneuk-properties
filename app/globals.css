@@ -158,7 +158,7 @@ textarea:focus-visible {
   margin: 0 5%;
   padding: 13px 0;
   border-bottom: 1px solid var(--line);
-  font-size: 10px;
+  font-size: 12px;
   letter-spacing: 0.14em;
   color: var(--muted);
 }
@@ -295,7 +295,7 @@ textarea:focus-visible {
   color: var(--on-rose);
   padding: 17px 25px;
   min-height: 53px;
-  font-size: 12px;
+  font-size: 13px;
   font-weight: 600;
   letter-spacing: 0.025em;
   border-radius: 3px;
@@ -327,7 +327,7 @@ textarea:focus-visible {
   transform: none;
 }
 .button.small {
-  font-size: 11px;
+  font-size: 13px;
   min-height: 42px;
   padding: 11px 17px;
 }
@@ -407,7 +407,7 @@ textarea:focus-visible {
   gap: 14px;
   align-items: center;
   margin-top: 40px;
-  font-size: 11px;
+  font-size: 13px;
   color: var(--muted);
   line-height: 1.6;
 }
@@ -456,7 +456,7 @@ textarea:focus-visible {
   color: #fff7f9;
 }
 .image-story > span {
-  font-size: 9px;
+  font-size: 11px;
   letter-spacing: 0.18em;
 }
 .image-story h2 {
@@ -543,7 +543,7 @@ textarea:focus-visible {
 .location-input > span,
 .choice > span {
   display: block;
-  font-size: 10px;
+  font-size: 12px;
   letter-spacing: 0.14em;
   color: var(--muted);
   margin-bottom: 7px;
@@ -587,7 +587,7 @@ textarea:focus-visible {
   display: flex;
   align-items: center;
   gap: 10px;
-  font-size: 12px;
+  font-size: 13px;
   color: var(--muted);
 }
 .promises svg {
@@ -659,7 +659,7 @@ textarea:focus-visible {
   padding: 24px 22px;
 }
 .service-copy .eyebrow {
-  font-size: 9px;
+  font-size: 11px;
 }
 .service-copy h3 {
   font-size: 26px;
@@ -677,7 +677,7 @@ textarea:focus-visible {
   justify-content: space-between;
   align-items: center;
   margin-top: 22px;
-  font-size: 12px;
+  font-size: 13px;
   font-weight: 600;
 }
 .service-plus {
@@ -720,7 +720,7 @@ textarea:focus-visible {
 }
 .halal-banner .eyebrow {
   color: #d5b4c2;
-  font-size: 9px;
+  font-size: 11px;
 }
 .halal-banner h3 {
   font-size: 28px;
@@ -730,7 +730,7 @@ textarea:focus-visible {
   color: #efbdd0;
 }
 .halal-banner p {
-  font-size: 12px;
+  font-size: 13px;
   color: #d6e1da;
 }
 .halal-symbol {
@@ -795,7 +795,7 @@ textarea:focus-visible {
   left: 17px;
   background: #244a3d;
   color: #fff6fa;
-  font-size: 9px;
+  font-size: 11px;
   text-transform: uppercase;
   letter-spacing: 0.12em;
   padding: 7px 12px;
@@ -829,7 +829,7 @@ textarea:focus-visible {
   align-items: center;
   gap: 5px;
   color: var(--muted);
-  font-size: 11px;
+  font-size: 13px;
 }
 .property-info h3 {
   margin: 10px 0 17px;
@@ -839,7 +839,7 @@ textarea:focus-visible {
   align-items: center;
   gap: 15px;
   color: var(--muted);
-  font-size: 11px;
+  font-size: 13px;
 }
 .property-spec span {
   display: flex;
@@ -867,7 +867,7 @@ textarea:focus-visible {
   color: var(--rose);
 }
 .sample-note {
-  font-size: 10px;
+  font-size: 12px;
   color: var(--muted);
   display: block;
   margin-top: 15px;
@@ -897,7 +897,7 @@ textarea:focus-visible {
   box-shadow: var(--shadow);
 }
 .floating-note .eyebrow {
-  font-size: 9px;
+  font-size: 11px;
 }
 .floating-note p {
   font: 30px/1.15 Georgia;
@@ -1009,7 +1009,7 @@ footer p {
   margin-top: 25px;
 }
 .footer-detail {
-  font-size: 11px;
+  font-size: 13px;
   color: var(--muted);
   margin-top: 25px;
 }
@@ -1021,7 +1021,7 @@ footer p {
 }
 .footer-grid > div > a:not(.brand):not(.text-link) {
   display: block;
-  font-size: 12px;
+  font-size: 13px;
   color: var(--muted);
   margin-top: 12px;
 }
@@ -1035,7 +1035,7 @@ footer p {
   gap: 20px;
   padding-block: 23px;
   border-top: 1px solid var(--line);
-  font-size: 10px;
+  font-size: 13px;
   color: var(--muted);
 }
 .footer-base div {
@@ -1091,7 +1091,7 @@ footer p {
 @media (max-width: 1200px) {
   .desktop-nav {
     gap: 15px;
-    font-size: 12px;
+    font-size: 13px;
   }
   .nav-valuation {
     display: none;
@@ -1146,7 +1146,7 @@ footer p {
     height: 500px;
   }
   .hero-copy .eyebrow {
-    font-size: 9px;
+    font-size: 11px;
   }
   .services-grid {
     grid-template-columns: repeat(2, 1fr);
@@ -1301,7 +1301,7 @@ footer p {
     padding-block: 26px;
   }
   .promises span {
-    font-size: 10px;
+    font-size: 12px;
     gap: 7px;
   }
   .promises svg {
@@ -1334,7 +1334,7 @@ footer p {
     min-height: 53px;
   }
   .service-copy p {
-    font-size: 12px;
+    font-size: 13px;
     min-height: 110px;
   }
   .service-copy .eyebrow {
@@ -1347,7 +1347,7 @@ footer p {
     height: 30px;
   }
   .service-link {
-    font-size: 10px;
+    font-size: 12px;
     gap: 5px;
   }
   .service-plus {
@@ -1449,10 +1449,10 @@ footer p {
   }
   .button {
     padding: 15px 21px;
-    font-size: 11px;
+    font-size: 13px;
   }
   .eyebrow {
-    font-size: 9px;
+    font-size: 11px;
   }
 }
 @media (prefers-reduced-motion: reduce) {
