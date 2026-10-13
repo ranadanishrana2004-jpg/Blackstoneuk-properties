@@ -1,3 +1,4 @@
+import { GET as getSocial, POST as postSocial } from '@/app/api/social-links/route';
 import { describe, expect, it } from 'vitest';
 import { POST as postEnquiry } from '@/app/api/enquiries/route';
 import { GET as getProperties } from '@/app/api/properties/route';
@@ -331,5 +332,99 @@ describe('team workspace', () => {
     expect(
       (await upload(req('/api/team/upload', { method: 'POST', cookie, raw: bad }))).status,
     ).toBe(400);
+  });
+});
+
+describe('referrals, social settings and listing lifecycle', () => {
+  it('requires seller permission and retains referral details in the desk', async () => {
+    const body = enquiry({ kind: 'seller-referral' });
+    expect((await postEnquiry(req('/api/enquiries', { method: 'POST', body }))).status).toBe(400);
+    const referral = {
+      sellerName: 'Seller Example',
+      sellerEmail: 'seller@example.test',
+      address: '10 Example Road, Bolton',
+      permission: true,
+    };
+    expect(
+      (
+        await postEnquiry(
+          req('/api/enquiries', {
+            method: 'POST',
+            body: { ...body, referral: { ...referral, permission: false } },
+          }),
+        )
+      ).status,
+    ).toBe(400);
+    expect(
+      (await postEnquiry(req('/api/enquiries', { method: 'POST', body: { ...body, referral } })))
+        .status,
+    ).toBe(201);
+    const cookie = await login();
+    const desk = await (await getTeam(req('/api/team', { cookie }))).json();
+    const stored = desk.enquiries.find((e: { id: string }) => e.id === body.requestId);
+    expect(stored.kind).toBe('seller-referral');
+    expect(stored.message).toContain('Seller Example');
+    expect(stored.message).toContain('after sale completion');
+  });
+  it('requires owner authentication and rejects unsafe social destinations', async () => {
+    const links = {
+      facebook: 'https://www.facebook.com/example',
+      instagram: 'https://www.instagram.com/example',
+    };
+    expect(
+      (await postSocial(req('/api/social-links', { method: 'POST', body: links }))).status,
+    ).toBe(401);
+    const cookie = await login();
+    for (const facebook of [
+      'javascript:alert(1)',
+      'https://facebook.com.evil.test/example',
+      'https://evil.test',
+    ])
+      expect(
+        (
+          await postSocial(
+            req('/api/social-links', { method: 'POST', cookie, body: { ...links, facebook } }),
+          )
+        ).status,
+      ).toBe(400);
+    expect(
+      (await postSocial(req('/api/social-links', { method: 'POST', cookie, body: links }))).status,
+    ).toBe(200);
+    expect(await (await getSocial()).json()).toEqual(links);
+    expect(
+      (
+        await postSocial(
+          req('/api/social-links', {
+            method: 'POST',
+            cookie,
+            body: { facebook: '', instagram: '' },
+          }),
+        )
+      ).status,
+    ).toBe(200);
+    expect(await (await getSocial()).json()).toEqual({ facebook: '', instagram: '' });
+  });
+  it('persists new-build and sold status without hiding the listing', async () => {
+    const cookie = await login();
+    const listings = await (await getProperties()).json();
+    const property = {
+      ...listings.properties[0],
+      id: 'new-home-regression',
+      slug: 'new-home-regression',
+      newHome: true,
+      status: 'sold',
+    };
+    expect(
+      (
+        await postTeam(
+          req('/api/team', { method: 'POST', cookie, body: { action: 'save-property', property } }),
+        )
+      ).status,
+    ).toBe(200);
+    const saved = await (await getProperties()).json();
+    expect(saved.properties.find((p: { id: string }) => p.id === property.id)).toMatchObject({
+      newHome: true,
+      status: 'sold',
+    });
   });
 });

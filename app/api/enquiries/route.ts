@@ -54,7 +54,14 @@ export async function POST(request: Request) {
         data.email,
         data.phone,
         data.postcode,
-        data.message,
+        data.kind === 'seller-referral' && data.referral
+          ? `Seller: ${data.referral.sellerName}
+Seller email: ${data.referral.sellerEmail}
+Property: ${data.referral.address}
+Seller permission confirmed. Reward: £100 after sale completion through Blackstone. Terms: referral-v1.
+
+${data.message}`
+          : data.message,
         data.propertyId,
         Date.now(),
         CONSENT_VERSION,

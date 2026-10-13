@@ -1,5 +1,6 @@
 'use client';
 import Link from 'next/link';
+import { SocialLinks } from './social-links';
 import { usePathname, useRouter } from 'next/navigation';
 import { useEffect, useState, createContext, useContext } from 'react';
 import {
@@ -175,6 +176,21 @@ export function Shell({ children, contact }: { children: React.ReactNode; contac
       <div key={path} className="page-transition">
         {children}
       </div>
+      {!path.startsWith('/manage') && path !== '/refer-a-seller' && (
+        <aside className="referral-banner container">
+          <div>
+            <span className="eyebrow">A LITTLE THANK YOU. A NEW BEGINNING.</span>
+            <h2>Know someone selling?</h2>
+            <p>
+              Refer a seller and earn <strong>£100</strong> when their sale completes through
+              Blackstone.
+            </p>
+          </div>
+          <Link className="button" href="/refer-a-seller">
+            Refer a seller <span aria-hidden="true">↗</span>
+          </Link>
+        </aside>
+      )}
       <footer>
         <div className="container footer-grid">
           <div>
@@ -200,12 +216,15 @@ export function Shell({ children, contact }: { children: React.ReactNode; contac
               )}
               {contact.hours && <span>{contact.hours}</span>}
             </address>
+            <SocialLinks />
           </div>
           <div>
             <h3>Your next move</h3>
             <Link href="/properties?tenure=buy">Find a home to buy</Link>
             <Link href="/properties?tenure=rent">Find a home to rent</Link>
             <Link href="/selling">Sell your property</Link>
+            <Link href="/properties?newHomes=1">Discover new homes</Link>
+            <Link href="/refer-a-seller">Refer a seller · Earn £100</Link>
             <Link href="/landlords">Let your property</Link>
           </div>
           <div>
@@ -413,7 +432,7 @@ export function PropertyCard({
       <div className="property-info">
         <div className="card-price">
           <strong>{formatPrice(p)}</strong>
-          <small>{p.tenure === 'rent' ? 'To rent' : 'For sale'}</small>
+          <small>{statusLabel(p.status, p.tenure)}</small>
         </div>
         <div className="location">
           <MapPin size={13} />
@@ -422,6 +441,7 @@ export function PropertyCard({
         <Link href={'/properties/' + p.slug}>
           <h3>{p.name}</h3>
         </Link>
+        {p.newHome && <span className="new-home-label">New-build home</span>}
         <div className="property-spec">
           <span>
             <BedDouble size={16} />

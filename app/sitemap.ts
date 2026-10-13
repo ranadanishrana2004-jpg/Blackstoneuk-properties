@@ -8,6 +8,7 @@ const PAGES = [
   '',
   '/properties',
   '/selling',
+  '/refer-a-seller',
   '/landlords',
   '/halal-mortgages',
   '/valuation',

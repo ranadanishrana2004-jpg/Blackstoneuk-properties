@@ -68,6 +68,8 @@ export function Catalog({
   const [beds, setBeds] = useState(params.get('beds') || 'any');
   const [price, setPrice] = useState(params.get('price') || 'any');
   const [type, setType] = useState(params.get('type') || 'all');
+  const [newHomes, setNewHomes] = useState(params.get('newHomes') === '1');
+  const [hideUnavailable, setHideUnavailable] = useState(params.get('hideUnavailable') === '1');
   const [sort, setSort] = useState('featured');
   const [view, setView] = useState<'list' | 'grid'>('list');
   useEffect(() => {
@@ -76,10 +78,14 @@ export function Catalog({
     setBeds(params.get('beds') || 'any');
     setPrice(params.get('price') || 'any');
     setType(params.get('type') || 'all');
+    setNewHomes(params.get('newHomes') === '1');
+    setHideUnavailable(params.get('hideUnavailable') === '1');
   }, [params]);
   const filtered = items.filter(
     (p) =>
       (!shortlist || saved.includes(p.id)) &&
+      (!newHomes || p.newHome === true) &&
+      (!hideUnavailable || isAvailable(p.status)) &&
       (tenure === 'all' || p.tenure === tenure) &&
       (!q ||
         (p.location + ' ' + p.name + ' ' + p.postcode)
@@ -96,7 +102,15 @@ export function Catalog({
     router.replace(
       (shortlist ? '/shortlist' : '/properties') +
         '?' +
-        new URLSearchParams({ q, tenure, beds, price, type }).toString(),
+        new URLSearchParams({
+          q,
+          tenure,
+          beds,
+          price,
+          type,
+          newHomes: newHomes ? '1' : '0',
+          hideUnavailable: hideUnavailable ? '1' : '0',
+        }).toString(),
       { scroll: false },
     );
   }
@@ -106,6 +120,8 @@ export function Catalog({
     setBeds('any');
     setPrice('any');
     setType('all');
+    setNewHomes(false);
+    setHideUnavailable(false);
     router.replace(shortlist ? '/shortlist' : '/properties', { scroll: false });
   }
   return (
@@ -197,6 +213,19 @@ export function Catalog({
               (v) => [v, v === 'all' ? 'Any type' : v],
             )}
           />
+          <div className="catalog-checks">
+            <label>
+              <Checkbox checked={newHomes} onCheckedChange={(v) => setNewHomes(v === true)} />
+              New homes only
+            </label>
+            <label>
+              <Checkbox
+                checked={hideUnavailable}
+                onCheckedChange={(v) => setHideUnavailable(v === true)}
+              />
+              Hide sold, under offer &amp; let agreed
+            </label>
+          </div>
           <button className="button">
             <Search size={16} />
             Search
@@ -307,6 +336,16 @@ export function EnquiryForm({
           website: data.get('website') || '',
           consent: true,
           requestId: requestId.current,
+          ...(kind === 'seller-referral'
+            ? {
+                referral: {
+                  sellerName: data.get('sellerName'),
+                  sellerEmail: data.get('sellerEmail'),
+                  address: data.get('sellerAddress'),
+                  permission: data.get('sellerPermission') === 'on',
+                },
+              }
+            : {}),
         }),
       });
       const result = (await r.json()) as { error: string; reference: string };
@@ -383,6 +422,28 @@ export function EnquiryForm({
               />
             </label>
           </div>
+          {kind === 'seller-referral' && (
+            <fieldset className="referral-fields">
+              <legend>The seller you are introducing</legend>
+              <label>
+                Seller’s full name
+                <input name="sellerName" required minLength={2} maxLength={100} />
+              </label>
+              <label>
+                Seller’s email
+                <input name="sellerEmail" type="email" required maxLength={200} />
+              </label>
+              <label>
+                Property address
+                <input name="sellerAddress" required minLength={5} maxLength={300} />
+              </label>
+              <label className="referral-permission">
+                <input name="sellerPermission" type="checkbox" required />I have the seller’s
+                permission to share these details and for Blackstone to contact them. I understand
+                the £100 reward is payable after their property sale completes through Blackstone.
+              </label>
+            </fieldset>
+          )}
           <label>
             {kind === 'halal-mortgage'
               ? 'How can we help with your Halal mortgage enquiry?'
@@ -394,11 +455,13 @@ export function EnquiryForm({
               maxLength={3000}
               rows={4}
               placeholder={
-                kind === 'valuation'
-                  ? 'Your property type, number of bedrooms and preferred time for a conversation.'
-                  : kind === 'halal-mortgage'
-                    ? 'Tell us whether you are buying your first home, moving home or exploring your options. Please do not include financial documents or account details.'
-                    : 'What are you looking for, and when would you like to move?'
+                kind === 'seller-referral'
+                  ? 'Tell us about the seller’s plans and the best time to get in touch.'
+                  : kind === 'valuation'
+                    ? 'Your property type, number of bedrooms and preferred time for a conversation.'
+                    : kind === 'halal-mortgage'
+                      ? 'Tell us whether you are buying your first home, moving home or exploring your options. Please do not include financial documents or account details.'
+                      : 'What are you looking for, and when would you like to move?'
               }
             />
           </label>
@@ -522,7 +585,10 @@ export function PropertyDetail({
           <a href="#key-information">Key information</a>
           <a href="#features">Features</a>
           <a href="#property-enquiry">
-            {p.sample ? 'Enquire about similar homes' : 'Arrange a viewing'} →
+            {p.sample || !isAvailable(p.status)
+              ? 'Enquire about similar homes'
+              : 'Arrange a viewing'}{' '}
+            →
           </a>
         </nav>
         <div className="detail-columns">
@@ -639,7 +705,11 @@ export function PropertyDetail({
             <EnquiryForm
               kind="viewing"
               propertyId={p.id}
-              heading={p.sample ? 'Enquire about similar homes.' : 'Arrange your viewing.'}
+              heading={
+                p.sample || !isAvailable(p.status)
+                  ? 'Enquire about similar homes.'
+                  : 'Arrange your viewing.'
+              }
             />
           </div>
         </div>

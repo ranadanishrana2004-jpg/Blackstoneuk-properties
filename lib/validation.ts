@@ -6,21 +6,39 @@ export const ENQUIRY_KINDS = [
   'viewing',
   'halal-mortgage',
   'landlord',
+  'seller-referral',
 ] as const;
 export const CONSENT_VERSION = '2026-10-privacy-v2';
 
-export const enquirySchema = z.object({
-  kind: z.enum(ENQUIRY_KINDS),
-  name: z.string().trim().min(2).max(100),
-  email: z.string().trim().email().max(200),
-  phone: z.string().trim().max(30).optional().default(''),
-  postcode: z.string().trim().max(20).optional().default(''),
-  message: z.string().trim().min(10).max(3000),
-  propertyId: z.string().max(100).optional().default(''),
-  consent: z.literal(true),
-  website: z.string().max(200).optional().default(''),
-  requestId: z.string().uuid(),
-});
+export const enquirySchema = z
+  .object({
+    kind: z.enum(ENQUIRY_KINDS),
+    name: z.string().trim().min(2).max(100),
+    email: z.string().trim().email().max(200),
+    phone: z.string().trim().max(30).optional().default(''),
+    postcode: z.string().trim().max(20).optional().default(''),
+    message: z.string().trim().min(10).max(3000),
+    propertyId: z.string().max(100).optional().default(''),
+    consent: z.literal(true),
+    website: z.string().max(200).optional().default(''),
+    requestId: z.string().uuid(),
+    referral: z
+      .object({
+        sellerName: z.string().trim().min(2).max(100),
+        sellerEmail: z.string().trim().email().max(200),
+        address: z.string().trim().min(5).max(300),
+        permission: z.literal(true),
+      })
+      .optional(),
+  })
+  .superRefine((data, ctx) => {
+    if (data.kind === 'seller-referral' && !data.referral)
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: 'Seller details and permission are required',
+        path: ['referral'],
+      });
+  });
 
 const imagePath = z
   .string()
@@ -68,8 +86,9 @@ export const propertySchema = z.object({
   description: z.string().trim().min(30).max(10_000),
   features: z.array(z.string().max(200)).max(20),
   sample: z.boolean(),
-  status: z.enum(['available', 'under-offer', 'let-agreed', 'archived']),
+  status: z.enum(['available', 'under-offer', 'let-agreed', 'sstc', 'sold', 'archived']),
   featured: z.boolean().optional().default(false),
+  newHome: z.boolean().optional().default(false),
   epc: optionalChoice(['A', 'B', 'C', 'D', 'E', 'F', 'G']),
   councilTaxBand: optionalChoice(['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H']),
   tenureType: optionalChoice(['freehold', 'leasehold', 'share-of-freehold']),

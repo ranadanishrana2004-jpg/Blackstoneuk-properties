@@ -1244,3 +1244,177 @@
   line-height: 1.6;
   border-radius: 6px;
 }
+
+/* Collection filters, referrals and social profiles share both theme palettes. */
+.catalog-checks {
+  grid-column: 1 / -2;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 18px 30px;
+  align-items: center;
+}
+.catalog-checks label {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  font-size: 14px;
+  cursor: pointer;
+}
+.catalog-checks [role='checkbox'] {
+  flex-shrink: 0;
+}
+.status-sold,
+.status-sstc {
+  background: var(--rose);
+  color: var(--bg);
+  border-radius: 3px;
+  padding: 10px 18px;
+  box-shadow: 0 6px 18px #0003;
+}
+.social-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 22px;
+}
+footer .social-links a {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 14px;
+  margin: 0;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  transition:
+    transform 0.2s,
+    background 0.2s;
+}
+footer .social-links a:hover {
+  transform: translateY(-3px);
+  background: var(--bg);
+  color: var(--rose);
+}
+.social-settings {
+  margin-top: 32px;
+  padding: 26px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--surface);
+}
+.referral-banner {
+  margin-block: 40px 70px;
+  padding: 38px;
+  display: flex;
+  gap: 30px;
+  justify-content: space-between;
+  align-items: center;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: linear-gradient(120deg, var(--surface), var(--bg));
+  border-left: 4px solid var(--rose);
+}
+.referral-banner h2 {
+  font-size: clamp(28px, 3vw, 40px);
+  margin: 12px 0;
+}
+.referral-banner p {
+  color: var(--muted);
+  max-width: 590px;
+}
+.referral-banner .button {
+  flex-shrink: 0;
+}
+.referral-layout {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 70px;
+  align-items: start;
+  padding-top: 0;
+}
+.referral-reward {
+  display: inline-grid;
+  color: var(--rose);
+  font:
+    76px Georgia,
+    serif;
+  margin-bottom: 30px;
+}
+.referral-reward small {
+  font:
+    11px var(--font-sans),
+    sans-serif;
+  letter-spacing: 0.18em;
+  margin-top: 12px;
+}
+.referral-story h2 {
+  font-size: clamp(28px, 3vw, 40px);
+}
+.referral-steps {
+  list-style: decimal-leading-zero;
+  padding-left: 28px;
+  margin: 30px 0;
+}
+.referral-steps li {
+  padding: 0 0 20px 12px;
+}
+.referral-steps li::marker {
+  color: var(--rose);
+}
+.referral-steps p {
+  color: var(--muted);
+  margin-top: 6px;
+}
+.referral-fields {
+  border: 1px solid var(--line);
+  padding: 18px;
+  margin: 22px 0;
+  border-radius: 6px;
+}
+.referral-fields legend {
+  padding: 0 8px;
+  color: var(--rose);
+}
+.enquiry-form .referral-permission {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  font-size: 13px;
+}
+.enquiry-form .referral-permission input {
+  width: 18px;
+  height: 18px;
+  min-height: 18px;
+  margin-top: 4px;
+  flex-shrink: 0;
+  accent-color: var(--rose);
+}
+@media (max-width: 800px) {
+  .referral-layout {
+    grid-template-columns: 1fr;
+    gap: 30px;
+  }
+  .referral-banner {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 25px;
+  }
+  .catalog-checks {
+    grid-column: 1 / -1;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  footer .social-links a {
+    transition: none;
+  }
+}
+
+.new-home-label {
+  display: inline-block;
+  color: var(--rose);
+  border: 1px solid var(--line);
+  padding: 4px 10px;
+  margin: 8px 0;
+  font-size: 12px;
+  letter-spacing: 0.05em;
+  border-radius: 4px;
+}

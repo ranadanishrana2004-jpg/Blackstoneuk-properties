@@ -1,6 +1,7 @@
 'use client';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
+import { SocialSettings } from './social-links';
 import { PasswordField } from './password-field';
 import { toast } from 'sonner';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
@@ -56,6 +57,7 @@ const KIND_LABELS: Record<string, string> = {
   viewing: 'Viewing',
   'halal-mortgage': 'Halal mortgage',
   landlord: 'Landlord',
+  'seller-referral': 'Seller referral (£100)',
 };
 
 const emptyProperty = (): Property => ({
@@ -498,6 +500,7 @@ export function TeamWorkspace() {
             {isOwner && (
               <TabsContent value="team">
                 <TeamPanel desk={desk} busy={busy} onRun={run} />
+                <SocialSettings />
               </TabsContent>
             )}
 
@@ -773,6 +776,8 @@ export function TeamWorkspace() {
                   options={[
                     ['available', 'Available'],
                     ['under-offer', 'Under offer'],
+                    ['sstc', 'Sold subject to contract'],
+                    ['sold', 'Sold'],
                     ['let-agreed', 'Let agreed'],
                     ['archived', 'Archived (hidden)'],
                   ]}
@@ -845,6 +850,13 @@ export function TeamWorkspace() {
                 )}
               </div>
 
+              <label className="consent-row">
+                <Checkbox
+                  checked={edit.newHome === true}
+                  onCheckedChange={(v) => set('newHome', v === true)}
+                />
+                New-build home (include in New homes only searches)
+              </label>
               <label>
                 Description
                 <textarea
