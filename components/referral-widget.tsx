@@ -5,26 +5,18 @@ import { useEffect, useRef, useState } from 'react';
 import { REFERRALS } from '@/lib/referrals';
 
 const HIDDEN_ON = ['/manage', '/refer-a-seller', '/refer-a-landlord', '/referral-terms'];
-const STORAGE_KEY = 'bsuk-referral-fab-hidden';
 
 /**
  * A compact, always-present entry point to the referral programmes.
- * Sits at the right edge on every public page, expands into a small card, and can be dismissed
- * for the rest of the browsing session.
+ * Sits at the right edge on every public page and expands into a small card. The close button
+ * only hides it until the page is reloaded or the site is visited again, so the offer always
+ * comes back.
  */
 export function ReferralWidget() {
   const path = usePathname();
-  const [hidden, setHidden] = useState(true); // hidden until mounted, so no layout flash
+  const [hidden, setHidden] = useState(false);
   const [open, setOpen] = useState(false);
   const root = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    try {
-      setHidden(sessionStorage.getItem(STORAGE_KEY) === '1');
-    } catch {
-      setHidden(false);
-    }
-  }, []);
 
   useEffect(() => {
     setOpen(false);
@@ -47,10 +39,8 @@ export function ReferralWidget() {
   if (hidden || HIDDEN_ON.some((prefix) => path.startsWith(prefix))) return null;
 
   const dismiss = () => {
+    setOpen(false);
     setHidden(true);
-    try {
-      sessionStorage.setItem(STORAGE_KEY, '1');
-    } catch {}
   };
 
   const seller = REFERRALS['seller-referral'];
