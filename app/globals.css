@@ -63,7 +63,7 @@ body {
   background: var(--bg);
   color: var(--text);
   font:
-    17px/1.7 Arial,
+    16px/1.7 Arial,
     sans-serif;
   transition:
     background 0.35s,
@@ -136,7 +136,7 @@ textarea:focus-visible {
   padding-block: 100px;
 }
 .eyebrow {
-  font: 600 13px/1.5 Arial;
+  font: 600 11px/1.5 Arial;
   letter-spacing: 0.17em;
   text-transform: uppercase;
   color: var(--rose);
@@ -158,7 +158,7 @@ textarea:focus-visible {
   margin: 0 5%;
   padding: 13px 0;
   border-bottom: 1px solid var(--line);
-  font-size: 14px;
+  font-size: 12px;
   letter-spacing: 0.14em;
   color: var(--muted);
 }
@@ -210,7 +210,7 @@ textarea:focus-visible {
   font: 39px/0.85 Georgia;
 }
 .monogram span {
-  font: 11px Arial;
+  font: 8px Arial;
   letter-spacing: 0.16em;
   line-height: 1;
   margin-top: 5px;
@@ -221,7 +221,7 @@ textarea:focus-visible {
 }
 .brand-type small {
   display: block;
-  font: 12px Arial;
+  font: 9px Arial;
   letter-spacing: 0.28em;
   margin-top: 8px;
   color: var(--green);
@@ -229,7 +229,7 @@ textarea:focus-visible {
 .desktop-nav {
   display: flex;
   gap: 22px;
-  font-size: 15px;
+  font-size: 13px;
 }
 .desktop-nav a {
   position: relative;
@@ -279,7 +279,7 @@ textarea:focus-visible {
   top: -3px;
   background: var(--rose);
   color: var(--on-rose);
-  font-size: 12px;
+  font-size: 9px;
   width: 15px;
   height: 15px;
   border-radius: 50%;
@@ -295,7 +295,7 @@ textarea:focus-visible {
   color: var(--on-rose);
   padding: 17px 25px;
   min-height: 53px;
-  font-size: 15px;
+  font-size: 13px;
   font-weight: 600;
   letter-spacing: 0.025em;
   border-radius: 3px;
@@ -327,7 +327,7 @@ textarea:focus-visible {
   transform: none;
 }
 .button.small {
-  font-size: 15px;
+  font-size: 13px;
   min-height: 42px;
   padding: 11px 17px;
 }
@@ -337,7 +337,7 @@ textarea:focus-visible {
   color: var(--green);
 }
 .text-link {
-  font-size: 15px;
+  font-size: 13px;
   border-bottom: 1px solid var(--rose);
   padding-bottom: 5px;
   display: inline-block;
@@ -391,7 +391,7 @@ textarea:focus-visible {
   margin: 26px 0;
 }
 .hero-copy > p {
-  font-size: 17px;
+  font-size: 16px;
   line-height: 1.8;
   max-width: 425px;
   color: var(--muted);
@@ -407,7 +407,7 @@ textarea:focus-visible {
   gap: 14px;
   align-items: center;
   margin-top: 40px;
-  font-size: 15px;
+  font-size: 13px;
   color: var(--muted);
   line-height: 1.6;
 }
@@ -456,7 +456,7 @@ textarea:focus-visible {
   color: #fff7f9;
 }
 .image-story > span {
-  font-size: 13px;
+  font-size: 11px;
   letter-spacing: 0.18em;
 }
 .image-story h2 {
@@ -487,7 +487,7 @@ textarea:focus-visible {
   animation: float 8s ease-in-out infinite;
 }
 .hero-seal span {
-  font-size: 11px;
+  font-size: 8px;
   letter-spacing: 0.12em;
   text-align: center;
   line-height: 1.5;
@@ -526,7 +526,7 @@ textarea:focus-visible {
   border: 0 !important;
   border-bottom: 2px solid transparent !important;
   padding: 0 0 9px !important;
-  font-size: 15px;
+  font-size: 13px;
   min-width: 95px;
 }
 .search-tabs button[data-state='active'] {
@@ -543,7 +543,7 @@ textarea:focus-visible {
 .location-input > span,
 .choice > span {
   display: block;
-  font-size: 14px;
+  font-size: 12px;
   letter-spacing: 0.14em;
   color: var(--muted);
   margin-bottom: 7px;
@@ -564,7 +564,7 @@ textarea:focus-visible {
   outline: none;
   width: 100%;
   min-width: 0;
-  font-size: 16px;
+  font-size: 14px;
 }
 .choice [data-slot='select-trigger'] {
   width: 100%;
@@ -574,7 +574,7 @@ textarea:focus-visible {
   border-bottom: 1px solid var(--line);
   box-shadow: none;
   padding-left: 0;
-  font-size: 16px;
+  font-size: 14px;
 }
 .promises {
   display: flex;
@@ -587,7 +587,7 @@ textarea:focus-visible {
   display: flex;
   align-items: center;
   gap: 10px;
-  font-size: 15px;
+  font-size: 13px;
   color: var(--muted);
 }
 .promises svg {
@@ -607,7 +607,7 @@ textarea:focus-visible {
   margin-top: 17px;
 }
 .section-heading > p {
-  font-size: 16px;
+  font-size: 14px;
   color: var(--muted);
   max-width: 340px;
 }
@@ -659,7 +659,7 @@ textarea:focus-visible {
   padding: 24px 22px;
 }
 .service-copy .eyebrow {
-  font-size: 13px;
+  font-size: 11px;
 }
 .service-copy h3 {
   font-size: 26px;
@@ -667,7 +667,7 @@ textarea:focus-visible {
   min-height: 60px;
 }
 .service-copy p {
-  font-size: 15px;
+  font-size: 13px;
   line-height: 1.8;
   color: var(--muted);
   min-height: 90px;
@@ -677,7 +677,7 @@ textarea:focus-visible {
   justify-content: space-between;
   align-items: center;
   margin-top: 22px;
-  font-size: 15px;
+  font-size: 13px;
   font-weight: 600;
 }
 .service-plus {
@@ -720,7 +720,7 @@ textarea:focus-visible {
 }
 .halal-banner .eyebrow {
   color: #d5b4c2;
-  font-size: 13px;
+  font-size: 11px;
 }
 .halal-banner h3 {
   font-size: 28px;
@@ -730,7 +730,7 @@ textarea:focus-visible {
   color: #efbdd0;
 }
 .halal-banner p {
-  font-size: 15px;
+  font-size: 13px;
   color: #d6e1da;
 }
 .halal-symbol {
@@ -795,7 +795,7 @@ textarea:focus-visible {
   left: 17px;
   background: #244a3d;
   color: #fff6fa;
-  font-size: 13px;
+  font-size: 11px;
   text-transform: uppercase;
   letter-spacing: 0.12em;
   padding: 7px 12px;
@@ -829,7 +829,7 @@ textarea:focus-visible {
   align-items: center;
   gap: 5px;
   color: var(--muted);
-  font-size: 15px;
+  font-size: 13px;
 }
 .property-info h3 {
   margin: 10px 0 17px;
@@ -839,7 +839,7 @@ textarea:focus-visible {
   align-items: center;
   gap: 15px;
   color: var(--muted);
-  font-size: 15px;
+  font-size: 13px;
 }
 .property-spec span {
   display: flex;
@@ -867,7 +867,7 @@ textarea:focus-visible {
   color: var(--rose);
 }
 .sample-note {
-  font-size: 14px;
+  font-size: 12px;
   color: var(--muted);
   display: block;
   margin-top: 15px;
@@ -897,7 +897,7 @@ textarea:focus-visible {
   box-shadow: var(--shadow);
 }
 .floating-note .eyebrow {
-  font-size: 13px;
+  font-size: 11px;
 }
 .floating-note p {
   font: 30px/1.15 Georgia;
@@ -908,7 +908,7 @@ textarea:focus-visible {
 }
 .about-copy > p {
   color: var(--muted);
-  font-size: 16px;
+  font-size: 15px;
   line-height: 1.85;
   margin: 15px 0;
 }
@@ -916,7 +916,7 @@ textarea:focus-visible {
   display: grid;
   gap: 13px;
   margin: 27px 0 35px;
-  font-size: 15px;
+  font-size: 13px;
 }
 .values-list span {
   display: flex;
@@ -959,7 +959,7 @@ textarea:focus-visible {
   font-size: 27px;
 }
 .steps-grid p {
-  font-size: 16px;
+  font-size: 14px;
   color: var(--muted);
   max-width: 330px;
 }
@@ -1005,23 +1005,23 @@ footer {
 }
 footer p {
   color: var(--muted);
-  font-size: 15px;
+  font-size: 13px;
   margin-top: 25px;
 }
 .footer-detail {
-  font-size: 15px;
+  font-size: 13px;
   color: var(--muted);
   margin-top: 25px;
 }
 .footer-grid > div > h3 {
   font-family: Arial, sans-serif;
-  font-size: 15px;
+  font-size: 13px;
   font-weight: 600;
   margin-bottom: 20px;
 }
 .footer-grid > div > a:not(.brand):not(.text-link) {
   display: block;
-  font-size: 15px;
+  font-size: 13px;
   color: var(--muted);
   margin-top: 12px;
 }
@@ -1035,7 +1035,7 @@ footer p {
   gap: 20px;
   padding-block: 23px;
   border-top: 1px solid var(--line);
-  font-size: 15px;
+  font-size: 13px;
   color: var(--muted);
 }
 .footer-base div {
@@ -1091,7 +1091,7 @@ footer p {
 @media (max-width: 1200px) {
   .desktop-nav {
     gap: 15px;
-    font-size: 15px;
+    font-size: 13px;
   }
   .nav-valuation {
     display: none;
@@ -1146,7 +1146,7 @@ footer p {
     height: 500px;
   }
   .hero-copy .eyebrow {
-    font-size: 13px;
+    font-size: 11px;
   }
   .services-grid {
     grid-template-columns: repeat(2, 1fr);
@@ -1203,7 +1203,7 @@ footer p {
 }
 @media (max-width: 800px) {
   .top-strip {
-    font-size: 11px;
+    font-size: 8px;
     padding: 10px 0;
   }
   .top-strip span:last-child {
@@ -1225,7 +1225,7 @@ footer p {
     font-size: 17px;
   }
   .brand-type small {
-    font-size: 11px;
+    font-size: 7px;
   }
   .nav-actions {
     gap: 7px;
@@ -1248,7 +1248,7 @@ footer p {
     margin: 22px 0;
   }
   .hero-copy > p {
-    font-size: 16px;
+    font-size: 15px;
   }
   .hero-buttons {
     flex-direction: row;
@@ -1301,7 +1301,7 @@ footer p {
     padding-block: 26px;
   }
   .promises span {
-    font-size: 14px;
+    font-size: 12px;
     gap: 7px;
   }
   .promises svg {
@@ -1334,11 +1334,11 @@ footer p {
     min-height: 53px;
   }
   .service-copy p {
-    font-size: 15px;
+    font-size: 13px;
     min-height: 110px;
   }
   .service-copy .eyebrow {
-    font-size: 11px;
+    font-size: 8px;
   }
   .service-icon {
     left: 13px;
@@ -1347,7 +1347,7 @@ footer p {
     height: 30px;
   }
   .service-link {
-    font-size: 14px;
+    font-size: 12px;
     gap: 5px;
   }
   .service-plus {
@@ -1449,10 +1449,10 @@ footer p {
   }
   .button {
     padding: 15px 21px;
-    font-size: 15px;
+    font-size: 13px;
   }
   .eyebrow {
-    font-size: 13px;
+    font-size: 11px;
   }
 }
 @media (prefers-reduced-motion: reduce) {

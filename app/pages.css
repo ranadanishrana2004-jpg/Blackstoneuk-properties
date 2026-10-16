@@ -9,7 +9,7 @@
 .page-intro > p {
   max-width: 590px;
   color: var(--muted);
-  font-size: 17px;
+  font-size: 16px;
 }
 .catalog {
   padding-bottom: 90px;
@@ -36,14 +36,14 @@
 }
 .results-bar > p {
   margin-right: auto;
-  font-size: 15px;
+  font-size: 13px;
   color: var(--muted);
 }
 .results-bar .choice {
   min-width: 160px;
 }
 .results-bar .choice > span {
-  font-size: 13px;
+  font-size: 11px;
 }
 .empty-state {
   text-align: center;
@@ -125,7 +125,7 @@
   align-items: center;
   gap: 10px;
   margin-top: 25px;
-  font-size: 15px;
+  font-size: 13px;
   color: var(--green);
 }
 .finance-grid {
@@ -156,7 +156,7 @@
 }
 .faqs [data-slot='accordion-content'] {
   color: var(--muted);
-  font-size: 16px;
+  font-size: 14px;
   line-height: 1.8;
 }
 .finance-note {
@@ -169,7 +169,7 @@
   border-radius: 5px;
 }
 .finance-note p {
-  font-size: 15px;
+  font-size: 13px;
 }
 .enquiry-card {
   background: var(--surface);
@@ -193,13 +193,13 @@
 }
 .enquiry-form label,
 .login-card label {
-  font-size: 15px;
+  font-size: 13px;
   display: block;
   color: var(--text);
 }
 .enquiry-form label small {
   color: var(--muted);
-  font-size: 14px;
+  font-size: 12px;
 }
 .enquiry-form input,
 .enquiry-form textarea,
@@ -212,7 +212,7 @@
   border: 1px solid var(--line);
   border-radius: 3px;
   margin-top: 8px;
-  font-size: 16px;
+  font-size: 14px;
   min-width: 0;
   outline-offset: 2px;
 }
@@ -235,7 +235,7 @@
   border-color: var(--rose);
 }
 .consent-row label {
-  font-size: 15px;
+  font-size: 13px;
   line-height: 1.7;
   color: var(--muted);
 }
@@ -247,10 +247,10 @@
   background: #b03d3d16;
   color: var(--rose);
   border-left: 3px solid var(--rose);
-  font-size: 15px;
+  font-size: 13px;
 }
 .form-footnote {
-  font-size: 14px;
+  font-size: 12px;
   line-height: 1.7;
   color: var(--muted);
 }
@@ -269,7 +269,7 @@
 }
 .success-state p {
   color: var(--muted);
-  font-size: 16px;
+  font-size: 14px;
   margin: 17px 0;
 }
 .contact-layout {
@@ -291,14 +291,14 @@
   margin: 15px 0;
 }
 .contact-editorial p {
-  font-size: 16px;
+  font-size: 14px;
   color: var(--muted);
   margin: 20px 0 25px;
 }
 .breadcrumbs {
   display: flex;
   gap: 13px;
-  font-size: 15px;
+  font-size: 13px;
   color: var(--muted);
   padding: 30px 0;
 }
@@ -317,7 +317,7 @@
   text-align: right;
 }
 .detail-title > div:last-child > span {
-  font-size: 15px;
+  font-size: 13px;
   color: var(--muted);
 }
 .detail-price {
@@ -359,7 +359,7 @@
   display: flex;
   flex-direction: column;
   gap: 10px;
-  font-size: 15px;
+  font-size: 13px;
 }
 .detail-specs svg {
   color: var(--green);
@@ -375,7 +375,7 @@
 }
 .detail-section p {
   color: var(--muted);
-  font-size: 16px;
+  font-size: 15px;
 }
 .feature-list {
   display: grid;
@@ -387,14 +387,14 @@
   display: flex;
   align-items: center;
   gap: 9px;
-  font-size: 15px;
+  font-size: 13px;
 }
 .feature-list svg {
   color: var(--green);
 }
 .sample-alert {
   background: var(--soft);
-  font-size: 15px;
+  font-size: 13px;
   color: var(--muted);
   padding: 15px 20px;
   margin-top: 15px;
@@ -415,7 +415,7 @@
   font-size: 25px;
 }
 .finance-callout p {
-  font-size: 15px;
+  font-size: 13px;
   color: var(--muted);
   margin: 13px 0;
 }
@@ -461,7 +461,7 @@
 }
 .login-card > p {
   color: var(--muted);
-  font-size: 16px;
+  font-size: 14px;
   margin-bottom: 25px;
 }
 .login-card label {
@@ -484,7 +484,7 @@
   color: var(--rose);
 }
 .dashboard-stats span {
-  font-size: 15px;
+  font-size: 13px;
   color: var(--muted);
 }
 .team-filters {
@@ -511,11 +511,11 @@
 }
 .team-workspace td small {
   display: block;
-  font-size: 15px;
+  font-size: 13px;
   color: var(--muted);
 }
 .status-chip {
-  font-size: 15px;
+  font-size: 13px;
   padding: 5px 10px;
   border: 1px solid var(--line);
   border-radius: 20px;
@@ -534,7 +534,7 @@
   display: grid;
   grid-template-columns: 130px 1fr;
   gap: 10px;
-  font-size: 15px;
+  font-size: 13px;
 }
 .enquiry-details dt {
   color: var(--muted);
@@ -547,7 +547,7 @@
   overflow-wrap: anywhere;
   padding: 20px;
   background: var(--soft);
-  font-size: 16px;
+  font-size: 14px;
 }
 @media (max-width: 1100px) {
   .catalog-filters {
@@ -638,7 +638,7 @@
     gap: 10px;
   }
   .detail-specs span {
-    font-size: 15px;
+    font-size: 13px;
   }
   .feature-list {
     grid-template-columns: 1fr;
@@ -662,7 +662,7 @@
     font-size: 32px;
   }
   .dashboard-stats span {
-    font-size: 15px;
+    font-size: 13px;
   }
   .team-filters {
     flex-wrap: wrap;
@@ -689,7 +689,7 @@
   border-radius: 999px;
   background: var(--text);
   color: var(--bg);
-  font-size: 15px;
+  font-size: 13px;
   font-weight: 700;
   letter-spacing: 0.12em;
   text-transform: uppercase;
@@ -708,7 +708,7 @@
   gap: 8px;
   margin-top: 16px;
   font-style: normal;
-  font-size: 16px;
+  font-size: 14px;
 }
 .footer-contact a,
 .footer-contact span {
@@ -725,7 +725,7 @@
 }
 .footer-legal {
   padding-bottom: 28px;
-  font-size: 15px;
+  font-size: 13px;
   line-height: 1.6;
   opacity: 0.7;
 }
@@ -748,7 +748,7 @@
   border-radius: 999px;
   background: var(--text);
   color: var(--bg);
-  font-size: 15px;
+  font-size: 13px;
   font-weight: 700;
   text-decoration: none;
   box-shadow: 0 8px 24px rgb(0 0 0 / 0.25);
@@ -780,14 +780,14 @@
   margin: 14px 0;
 }
 .fact-grid dt {
-  font-size: 15px;
+  font-size: 13px;
   letter-spacing: 0.1em;
   text-transform: uppercase;
   color: var(--muted);
 }
 .fact-grid dd {
   margin: 4px 0 0;
-  font-size: 17px;
+  font-size: 16px;
   text-transform: capitalize;
 }
 .detail-contact {
@@ -834,7 +834,7 @@
   gap: 12px;
 }
 .team-user {
-  font-size: 16px;
+  font-size: 14px;
   color: var(--muted);
 }
 .dialog-actions {
@@ -853,7 +853,7 @@
 }
 .image-label {
   margin: 0;
-  font-size: 16px;
+  font-size: 14px;
 }
 .image-grid {
   display: grid;
@@ -864,7 +864,7 @@
   margin: 0;
   display: grid;
   gap: 4px;
-  font-size: 15px;
+  font-size: 13px;
 }
 .image-grid img {
   width: 100%;
@@ -899,16 +899,16 @@
 }
 .company-registration strong {
   display: block;
-  font-size: 16px;
+  font-size: 14px;
   margin-bottom: 6px;
 }
 .company-registration .eyebrow {
   display: block;
-  font-size: 13px;
+  font-size: 11px;
   margin-bottom: 10px;
 }
 .company-registration p {
-  font-size: 15px;
+  font-size: 13px;
   color: var(--muted);
   margin: 0;
   line-height: 1.8;
@@ -982,7 +982,7 @@
     margin: 17px 0;
   }
   .valuation-page .page-intro > p {
-    font-size: 16px;
+    font-size: 14px;
   }
   .valuation-page .contact-layout > .enquiry-card {
     grid-column: 1;
@@ -1000,7 +1000,7 @@
   }
   .quick-contact a {
     padding: 12px 10px;
-    font-size: 15px;
+    font-size: 13px;
     min-width: 0;
   }
   .quick-contact a svg {
@@ -1071,7 +1071,7 @@
   white-space: normal;
   overflow-wrap: anywhere;
   max-width: 320px;
-  font-size: 16px;
+  font-size: 14px;
 }
 .team-workspace td .text-link {
   min-height: 44px;
@@ -1095,7 +1095,7 @@
 }
 .team-help {
   color: var(--muted);
-  font-size: 16px;
+  font-size: 14px;
   line-height: 1.7;
 }
 .team-member-form > .button {
@@ -1107,7 +1107,7 @@
 }
 .team-dialog label {
   display: block;
-  font-size: 16px;
+  font-size: 14px;
 }
 .team-dialog input:not([type='checkbox']):not([type='file']),
 .team-dialog textarea,
@@ -1122,7 +1122,7 @@
   border-radius: 6px;
   background: var(--bg);
   color: var(--text);
-  font-size: 17px;
+  font-size: 16px;
 }
 .team-dialog textarea {
   resize: vertical;
@@ -1257,7 +1257,7 @@
   display: flex;
   gap: 10px;
   align-items: center;
-  font-size: 16px;
+  font-size: 14px;
   cursor: pointer;
 }
 .catalog-checks [role='checkbox'] {
@@ -1341,7 +1341,7 @@ footer .social-links a:hover {
 }
 .referral-reward small {
   font:
-    13px var(--font-sans),
+    11px var(--font-sans),
     sans-serif;
   letter-spacing: 0.18em;
   margin-top: 12px;
@@ -1378,7 +1378,7 @@ footer .social-links a:hover {
   display: flex;
   gap: 10px;
   align-items: flex-start;
-  font-size: 15px;
+  font-size: 13px;
 }
 .enquiry-form .referral-permission input {
   width: 18px;
@@ -1414,7 +1414,7 @@ footer .social-links a:hover {
   border: 1px solid var(--line);
   padding: 4px 10px;
   margin: 8px 0;
-  font-size: 14px;
+  font-size: 12px;
   letter-spacing: 0.05em;
   border-radius: 4px;
 }
