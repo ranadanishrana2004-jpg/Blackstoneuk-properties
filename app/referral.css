@@ -16,8 +16,8 @@
   display: grid;
   place-content: center;
   gap: 2px;
-  width: 118px;
-  height: 118px;
+  width: 132px;
+  height: 132px;
   padding: 0;
   border: 3px solid #e9c97a;
   border-radius: 50%;
@@ -48,22 +48,22 @@
   outline-offset: 3px;
 }
 .fab-badge-top {
-  font-size: 11px;
+  font-size: 15px;
   font-weight: 800;
-  letter-spacing: 0.12em;
+  letter-spacing: 0.1em;
   line-height: 1.2;
   color: #fbe9b6;
 }
 .fab-badge-amount {
   display: grid;
   font:
-    700 32px/1 Georgia,
+    700 36px/1 Georgia,
     'Times New Roman',
     serif;
 }
 .fab-badge-amount small {
   font:
-    600 10px/1.1 var(--font-sans),
+    600 13px/1.1 var(--font-sans),
     Arial,
     sans-serif;
   letter-spacing: 0.08em;
@@ -111,7 +111,7 @@
 }
 .referral-fab-panel p {
   margin: 0 0 16px;
-  font-size: 14px;
+  font-size: 16px;
   color: var(--muted);
 }
 .fab-option {
@@ -130,10 +130,10 @@
 }
 .fab-option b {
   display: block;
-  font-size: 15px;
+  font-size: 16px;
 }
 .fab-option small {
-  font-size: 12px;
+  font-size: 14px;
   opacity: 0.88;
 }
 .fab-option strong {
@@ -158,7 +158,7 @@
 .fab-terms {
   display: block;
   margin-top: 14px;
-  font-size: 12px;
+  font-size: 14px;
   text-align: center;
   color: var(--muted);
   text-decoration: underline;
@@ -191,14 +191,14 @@
     bottom: calc(78px + env(safe-area-inset-bottom, 0px));
   }
   .referral-fab-badge {
-    width: 96px;
-    height: 96px;
+    width: 112px;
+    height: 112px;
   }
   .fab-badge-top {
-    font-size: 9px;
+    font-size: 13px;
   }
   .fab-badge-amount {
-    font-size: 26px;
+    font-size: 30px;
   }
 }
 @media (prefers-reduced-motion: reduce) {
@@ -223,7 +223,7 @@
 .referral-switch a {
   padding: 9px 18px;
   border-radius: 999px;
-  font-size: 14px;
+  font-size: 16px;
   text-decoration: none;
   color: var(--text);
 }
@@ -233,7 +233,7 @@
 }
 .referral-terms-note {
   margin-top: 8px;
-  font-size: 13px;
+  font-size: 15px;
   color: var(--muted);
 }
 .referral-banner-rewards {

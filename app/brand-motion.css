@@ -17,7 +17,7 @@
   padding: 8px 6px;
   text-align: center;
   white-space: normal;
-  font-size: 13px;
+  font-size: 15px;
   font-weight: 600;
   line-height: 1.4;
   border: 1px solid #b68f9d55;
@@ -123,7 +123,7 @@ footer a:not(.brand):not(.button):focus-visible::after {
     gap: 6px;
   }
   .desktop-nav a {
-    font-size: 13px;
+    font-size: 15px;
     padding-inline: 4px;
   }
   .nav-row {
@@ -179,7 +179,7 @@ footer a:not(.brand):not(.button):focus-visible::after {
   gap: 8px;
   margin-top: 9px;
   font:
-    600 8px/1.4 Arial,
+    600 11px/1.4 Arial,
     sans-serif;
   letter-spacing: 0.24em;
   color: var(--rose);
@@ -338,7 +338,7 @@ footer a:not(.brand):not(.button):focus-visible::after {
     serif;
 }
 .brand-curtain-caption {
-  font-size: 13px;
+  font-size: 15px;
   line-height: 1.8;
   letter-spacing: 0.2em;
   color: var(--rose);
@@ -383,7 +383,7 @@ footer a:not(.brand):not(.button):focus-visible::after {
     width: 151px;
   }
   .client-brand-type small {
-    font-size: 7px;
+    font-size: 11px;
     letter-spacing: 0.18em;
   }
   .client-brand-name {
