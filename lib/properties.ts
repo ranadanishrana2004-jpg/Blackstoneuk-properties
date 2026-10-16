@@ -1,5 +1,6 @@
 export type Tenure = 'buy' | 'rent';
-export type PropertyStatus = 'available' | 'under-offer' | 'let-agreed' | 'sstc' | 'sold' | 'archived';
+export type PropertyStatus =
+  'available' | 'under-offer' | 'let-agreed' | 'sstc' | 'sold' | 'archived';
 
 export type Property = {
   id: string;

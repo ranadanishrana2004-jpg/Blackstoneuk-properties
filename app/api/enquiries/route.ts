@@ -1,6 +1,7 @@
 import { query } from '@/lib/db';
 import { drainOutbox } from '@/lib/outbox';
 import { jsonError, rateLimit, sameOrigin } from '@/lib/server';
+import { isReferralKind, referralMessage } from '@/lib/referrals';
 import { CONSENT_VERSION, enquirySchema } from '@/lib/validation';
 
 const MAX_BODY = 16_000;
@@ -54,13 +55,8 @@ export async function POST(request: Request) {
         data.email,
         data.phone,
         data.postcode,
-        data.kind === 'seller-referral' && data.referral
-          ? `Seller: ${data.referral.sellerName}
-Seller email: ${data.referral.sellerEmail}
-Property: ${data.referral.address}
-Seller permission confirmed. Reward: £100 after sale completion through Blackstone. Terms: referral-v1.
-
-${data.message}`
+        isReferralKind(data.kind) && data.referral
+          ? referralMessage(data.kind, data.referral, data.message)
           : data.message,
         data.propertyId,
         Date.now(),

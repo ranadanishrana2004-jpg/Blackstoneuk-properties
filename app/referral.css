@@ -1,0 +1,244 @@
+/* Referral programme: floating badge, option cards and terms. Uses the Royal Rose palette. */
+.referral-fab {
+  position: fixed;
+  right: 18px;
+  bottom: 96px;
+  z-index: 45;
+  display: grid;
+  justify-items: end;
+  gap: 12px;
+}
+.referral-fab-anchor {
+  position: relative;
+}
+.referral-fab-badge {
+  position: relative;
+  display: grid;
+  place-content: center;
+  gap: 2px;
+  width: 98px;
+  height: 98px;
+  padding: 0;
+  border: 3px solid #e9c97a;
+  border-radius: 50%;
+  color: #fff;
+  background:
+    radial-gradient(circle at 30% 22%, #ef7fae 0%, transparent 46%),
+    linear-gradient(145deg, #c2457f 0%, #973b63 48%, #4f1a38 100%);
+  box-shadow:
+    0 14px 34px #4f1a3866,
+    inset 0 0 0 2px #ffffff30;
+  cursor: pointer;
+  text-align: center;
+  font-family: var(--font-sans), Arial, sans-serif;
+  transition:
+    transform 0.25s cubic-bezier(0.22, 1, 0.36, 1),
+    box-shadow 0.25s ease;
+  animation: fab-pulse 3.6s ease-in-out infinite;
+}
+.referral-fab-badge:hover,
+.referral-fab[data-open='true'] .referral-fab-badge {
+  transform: scale(1.06) rotate(-3deg);
+  box-shadow:
+    0 18px 40px #4f1a3880,
+    inset 0 0 0 2px #ffffff40;
+}
+.referral-fab-badge:focus-visible {
+  outline: 3px solid #fff;
+  outline-offset: 3px;
+}
+.fab-badge-top {
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+  line-height: 1.15;
+  color: #fbe9b6;
+}
+.fab-badge-amount {
+  display: grid;
+  font:
+    700 27px/1 Georgia,
+    'Times New Roman',
+    serif;
+}
+.fab-badge-amount small {
+  font:
+    600 10px/1.1 var(--font-sans),
+    Arial,
+    sans-serif;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  opacity: 0.85;
+  margin-bottom: 2px;
+}
+.referral-fab-close {
+  position: absolute;
+  top: -6px;
+  right: -4px;
+  width: 26px;
+  height: 26px;
+  display: grid;
+  place-items: center;
+  padding: 0;
+  border: 1px solid var(--line);
+  border-radius: 50%;
+  background: var(--surface);
+  color: var(--text);
+  font-size: 17px;
+  line-height: 1;
+  cursor: pointer;
+  box-shadow: 0 4px 12px #0003;
+}
+.referral-fab-close:hover {
+  background: var(--soft);
+}
+.referral-fab-panel {
+  width: min(320px, calc(100vw - 36px));
+  padding: 22px;
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  background: var(--surface);
+  color: var(--text);
+  box-shadow: 0 24px 60px #0004;
+  max-height: calc(100vh - 200px);
+  overflow-y: auto;
+  transform-origin: bottom right;
+  animation: fab-in 0.28s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.referral-fab-panel h2 {
+  font-size: 22px;
+  margin: 8px 0 6px;
+}
+.referral-fab-panel p {
+  margin: 0 0 16px;
+  font-size: 14px;
+  color: var(--muted);
+}
+.fab-option {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  padding: 14px 16px;
+  margin-top: 10px;
+  border-radius: 12px;
+  color: #fff;
+  text-decoration: none;
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+}
+.fab-option b {
+  display: block;
+  font-size: 15px;
+}
+.fab-option small {
+  font-size: 12px;
+  opacity: 0.88;
+}
+.fab-option strong {
+  font:
+    700 26px Georgia,
+    serif;
+}
+.fab-option-seller {
+  background: linear-gradient(135deg, #c2457f, #7d2c52);
+}
+.fab-option-landlord {
+  background: linear-gradient(135deg, #2f6a54, #1b3f31);
+}
+.fab-option:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 24px #0003;
+}
+.fab-option:focus-visible {
+  outline: 3px solid var(--rose);
+  outline-offset: 2px;
+}
+.fab-terms {
+  display: block;
+  margin-top: 14px;
+  font-size: 12px;
+  text-align: center;
+  color: var(--muted);
+  text-decoration: underline;
+}
+
+@keyframes fab-pulse {
+  0%,
+  100% {
+    box-shadow:
+      0 14px 34px #4f1a3866,
+      0 0 0 0 #c2457f55,
+      inset 0 0 0 2px #ffffff30;
+  }
+  55% {
+    box-shadow:
+      0 14px 34px #4f1a3866,
+      0 0 0 16px #c2457f00,
+      inset 0 0 0 2px #ffffff30;
+  }
+}
+@keyframes fab-in {
+  from {
+    opacity: 0;
+    transform: translateY(10px) scale(0.94);
+  }
+}
+@media (max-width: 640px) {
+  .referral-fab {
+    right: 12px;
+    bottom: calc(86px + env(safe-area-inset-bottom, 0px));
+  }
+  .referral-fab-badge {
+    width: 78px;
+    height: 78px;
+  }
+  .fab-badge-top {
+    font-size: 8px;
+  }
+  .fab-badge-amount {
+    font-size: 21px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .referral-fab-badge,
+  .referral-fab-panel,
+  .fab-option {
+    animation: none;
+    transition: none;
+  }
+}
+
+/* Programme switcher and terms */
+.referral-switch {
+  display: inline-flex;
+  gap: 6px;
+  padding: 5px;
+  margin-bottom: 26px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: var(--surface);
+}
+.referral-switch a {
+  padding: 9px 18px;
+  border-radius: 999px;
+  font-size: 14px;
+  text-decoration: none;
+  color: var(--text);
+}
+.referral-switch a[aria-current='page'] {
+  background: var(--rose);
+  color: var(--on-rose);
+}
+.referral-terms-note {
+  margin-top: 8px;
+  font-size: 13px;
+  color: var(--muted);
+}
+.referral-banner-rewards {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  flex-shrink: 0;
+}

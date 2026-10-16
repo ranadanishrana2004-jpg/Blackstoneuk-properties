@@ -7,6 +7,7 @@ export const ENQUIRY_KINDS = [
   'halal-mortgage',
   'landlord',
   'seller-referral',
+  'landlord-referral',
 ] as const;
 export const CONSENT_VERSION = '2026-10-privacy-v2';
 
@@ -32,10 +33,10 @@ export const enquirySchema = z
       .optional(),
   })
   .superRefine((data, ctx) => {
-    if (data.kind === 'seller-referral' && !data.referral)
+    if ((data.kind === 'seller-referral' || data.kind === 'landlord-referral') && !data.referral)
       ctx.addIssue({
         code: z.ZodIssueCode.custom,
-        message: 'Seller details and permission are required',
+        message: 'Referral details and permission are required',
         path: ['referral'],
       });
   });

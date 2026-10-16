@@ -3,6 +3,7 @@ import './globals.css';
 import './pages.css';
 import './brand-motion.css';
 import './portal.css';
+import './referral.css';
 import { Shell } from '@/components/property-platform';
 import { COMPANY_NAME, getContact, siteUrl } from '@/lib/site';
 

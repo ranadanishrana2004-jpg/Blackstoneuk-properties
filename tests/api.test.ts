@@ -364,7 +364,40 @@ describe('referrals, social settings and listing lifecycle', () => {
     const stored = desk.enquiries.find((e: { id: string }) => e.id === body.requestId);
     expect(stored.kind).toBe('seller-referral');
     expect(stored.message).toContain('Seller Example');
-    expect(stored.message).toContain('after sale completion');
+    expect(stored.message).toContain('£100');
+    expect(stored.message).toContain('sale completes through Blackstone');
+    expect(stored.message).toContain('referral-v2');
+  });
+  it('accepts landlord referrals with the £150 reward and requires permission', async () => {
+    const body = enquiry({ kind: 'landlord-referral' });
+    const referral = {
+      sellerName: 'Landlord Example',
+      sellerEmail: 'landlord@example.test',
+      address: '22 Example Street, Wigan',
+      permission: true,
+    };
+    expect((await postEnquiry(req('/api/enquiries', { method: 'POST', body }))).status).toBe(400);
+    expect(
+      (
+        await postEnquiry(
+          req('/api/enquiries', {
+            method: 'POST',
+            body: { ...body, referral: { ...referral, permission: false } },
+          }),
+        )
+      ).status,
+    ).toBe(400);
+    expect(
+      (await postEnquiry(req('/api/enquiries', { method: 'POST', body: { ...body, referral } })))
+        .status,
+    ).toBe(201);
+    const cookie = await login();
+    const desk = await (await getTeam(req('/api/team', { cookie }))).json();
+    const stored = desk.enquiries.find((e: { id: string }) => e.id === body.requestId);
+    expect(stored.kind).toBe('landlord-referral');
+    expect(stored.message).toContain('Landlord: Landlord Example');
+    expect(stored.message).toContain('£150');
+    expect(stored.message).toContain('let through Blackstone');
   });
   it('requires owner authentication and rejects unsafe social destinations', async () => {
     const links = {

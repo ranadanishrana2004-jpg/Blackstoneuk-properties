@@ -58,6 +58,7 @@ const KIND_LABELS: Record<string, string> = {
   'halal-mortgage': 'Halal mortgage',
   landlord: 'Landlord',
   'seller-referral': 'Seller referral (£100)',
+  'landlord-referral': 'Landlord referral (£150)',
 };
 
 const emptyProperty = (): Property => ({

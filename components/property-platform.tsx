@@ -35,6 +35,7 @@ import { toast } from 'sonner';
 import { formatPrice, isAvailable, statusLabel, type Property } from '@/lib/properties';
 import { telHref, type ContactInfo } from '@/lib/site';
 import { BrandMark, BrandMotion } from '@/components/brand-motion';
+import { ReferralWidget } from '@/components/referral-widget';
 export const SavedContext = createContext<{ saved: string[]; toggle: (id: string) => void }>({
   saved: [],
   toggle: () => {},
@@ -176,21 +177,27 @@ export function Shell({ children, contact }: { children: React.ReactNode; contac
       <div key={path} className="page-transition">
         {children}
       </div>
-      {!path.startsWith('/manage') && path !== '/refer-a-seller' && (
-        <aside className="referral-banner container">
-          <div>
-            <span className="eyebrow">A LITTLE THANK YOU. A NEW BEGINNING.</span>
-            <h2>Know someone selling?</h2>
-            <p>
-              Refer a seller and earn <strong>£100</strong> when their sale completes through
-              Blackstone.
-            </p>
-          </div>
-          <Link className="button" href="/refer-a-seller">
-            Refer a seller <span aria-hidden="true">↗</span>
-          </Link>
-        </aside>
-      )}
+      {!path.startsWith('/manage') &&
+        !['/refer-a-seller', '/refer-a-landlord', '/referral-terms'].includes(path) && (
+          <aside className="referral-banner container">
+            <div>
+              <span className="eyebrow">SELLING OR RENTING. A LITTLE THANK YOU.</span>
+              <h2>Know a seller or a landlord?</h2>
+              <p>
+                Refer a seller and earn <strong>£100</strong>, or introduce a landlord and earn{' '}
+                <strong>£150</strong>. <Link href="/referral-terms">Terms apply.</Link>
+              </p>
+            </div>
+            <div className="referral-banner-rewards">
+              <Link className="button" href="/refer-a-seller">
+                Refer a seller · £100
+              </Link>
+              <Link className="button secondary" href="/refer-a-landlord">
+                Find a landlord · £150
+              </Link>
+            </div>
+          </aside>
+        )}
       <footer>
         <div className="container footer-grid">
           <div>
@@ -225,6 +232,7 @@ export function Shell({ children, contact }: { children: React.ReactNode; contac
             <Link href="/selling">Sell your property</Link>
             <Link href="/properties?newHomes=1">Discover new homes</Link>
             <Link href="/refer-a-seller">Refer a seller · Earn £100</Link>
+            <Link href="/refer-a-landlord">Find a landlord · Earn £150</Link>
             <Link href="/landlords">Let your property</Link>
           </div>
           <div>
@@ -255,6 +263,7 @@ export function Shell({ children, contact }: { children: React.ReactNode; contac
             <Link href="/privacy">Privacy</Link>
             <Link href="/cookies">Cookies</Link>
             <Link href="/terms">Terms</Link>
+            <Link href="/referral-terms">Referral terms</Link>
             <Link href="/manage">Team access</Link>
           </div>
         </div>
@@ -275,6 +284,7 @@ export function Shell({ children, contact }: { children: React.ReactNode; contac
             ))}
         </div>
       </footer>
+      <ReferralWidget />
       {!path.startsWith('/manage') && (contact.phone || contact.whatsapp || contact.email) && (
         <div className="quick-contact" aria-label="Contact us quickly">
           {contact.whatsapp && (

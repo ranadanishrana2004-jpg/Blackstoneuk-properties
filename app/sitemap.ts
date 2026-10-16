@@ -9,6 +9,8 @@ const PAGES = [
   '/properties',
   '/selling',
   '/refer-a-seller',
+  '/refer-a-landlord',
+  '/referral-terms',
   '/landlords',
   '/halal-mortgages',
   '/valuation',

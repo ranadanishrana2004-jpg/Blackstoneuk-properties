@@ -14,6 +14,7 @@ const KIND_LABELS: Record<string, string> = {
   'halal-mortgage': 'Halal mortgage enquiry',
   landlord: 'Landlord enquiry',
   'seller-referral': 'Seller referral',
+  'landlord-referral': 'Landlord referral',
 };
 
 export const kindLabel = (kind: string) => KIND_LABELS[kind] ?? kind;

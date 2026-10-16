@@ -28,6 +28,7 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { Choice, PropertyCard, CallToAction, SavedContext } from './property-platform';
 import { formatPrice, isAvailable, statusLabel, type Property } from '@/lib/properties';
 import { COMPANY_NAME, COMPANY_NUMBER, telHref, type ContactInfo } from '@/lib/site';
+import { REFERRALS, isReferralKind } from '@/lib/referrals';
 
 export function Intro({
   eyebrow,
@@ -336,7 +337,7 @@ export function EnquiryForm({
           website: data.get('website') || '',
           consent: true,
           requestId: requestId.current,
-          ...(kind === 'seller-referral'
+          ...(isReferralKind(kind)
             ? {
                 referral: {
                   sellerName: data.get('sellerName'),
@@ -422,15 +423,15 @@ export function EnquiryForm({
               />
             </label>
           </div>
-          {kind === 'seller-referral' && (
+          {isReferralKind(kind) && (
             <fieldset className="referral-fields">
-              <legend>The seller you are introducing</legend>
+              <legend>The {REFERRALS[kind].person} you are introducing</legend>
               <label>
-                Seller’s full name
+                {REFERRALS[kind].person === 'seller' ? 'Seller’s' : 'Landlord’s'} full name
                 <input name="sellerName" required minLength={2} maxLength={100} />
               </label>
               <label>
-                Seller’s email
+                {REFERRALS[kind].person === 'seller' ? 'Seller’s' : 'Landlord’s'} email
                 <input name="sellerEmail" type="email" required maxLength={200} />
               </label>
               <label>
@@ -438,9 +439,14 @@ export function EnquiryForm({
                 <input name="sellerAddress" required minLength={5} maxLength={300} />
               </label>
               <label className="referral-permission">
-                <input name="sellerPermission" type="checkbox" required />I have the seller’s
-                permission to share these details and for Blackstone to contact them. I understand
-                the £100 reward is payable after their property sale completes through Blackstone.
+                <input name="sellerPermission" type="checkbox" required />I have the{' '}
+                {REFERRALS[kind].person}’s permission to share these details and for Blackstone to
+                contact them. I understand the £{REFERRALS[kind].reward} reward is payable only
+                after {REFERRALS[kind].trigger}, and that{' '}
+                <Link href="/referral-terms" target="_blank">
+                  referral terms and conditions
+                </Link>{' '}
+                apply.
               </label>
             </fieldset>
           )}
@@ -455,8 +461,8 @@ export function EnquiryForm({
               maxLength={3000}
               rows={4}
               placeholder={
-                kind === 'seller-referral'
-                  ? 'Tell us about the seller’s plans and the best time to get in touch.'
+                isReferralKind(kind)
+                  ? `Tell us about the ${REFERRALS[kind].person}’s plans and the best time to get in touch.`
                   : kind === 'valuation'
                     ? 'Your property type, number of bedrooms and preferred time for a conversation.'
                     : kind === 'halal-mortgage'
