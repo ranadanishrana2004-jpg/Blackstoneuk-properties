@@ -95,7 +95,11 @@ export function ReferralWidget() {
           aria-controls="referral-fab-panel"
           onClick={() => setOpen((v) => !v)}
         >
-          <span className="fab-badge-top">REFER &amp; EARN</span>
+          <span className="fab-badge-top">
+            REFER
+            <br />
+            &amp; EARN
+          </span>
           <span className="fab-badge-amount">
             <small>up to</small>£{landlord.reward}
           </span>

@@ -1,8 +1,8 @@
 /* Referral programme: floating badge, option cards and terms. Uses the Royal Rose palette. */
 .referral-fab {
   position: fixed;
-  right: 18px;
-  bottom: 96px;
+  right: 20px;
+  bottom: 28px;
   z-index: 45;
   display: grid;
   justify-items: end;
@@ -16,8 +16,8 @@
   display: grid;
   place-content: center;
   gap: 2px;
-  width: 98px;
-  height: 98px;
+  width: 118px;
+  height: 118px;
   padding: 0;
   border: 3px solid #e9c97a;
   border-radius: 50%;
@@ -48,16 +48,16 @@
   outline-offset: 3px;
 }
 .fab-badge-top {
-  font-size: 10px;
+  font-size: 11px;
   font-weight: 800;
-  letter-spacing: 0.14em;
-  line-height: 1.15;
+  letter-spacing: 0.12em;
+  line-height: 1.2;
   color: #fbe9b6;
 }
 .fab-badge-amount {
   display: grid;
   font:
-    700 27px/1 Georgia,
+    700 32px/1 Georgia,
     'Times New Roman',
     serif;
 }
@@ -188,17 +188,17 @@
 @media (max-width: 640px) {
   .referral-fab {
     right: 12px;
-    bottom: calc(86px + env(safe-area-inset-bottom, 0px));
+    bottom: calc(78px + env(safe-area-inset-bottom, 0px));
   }
   .referral-fab-badge {
-    width: 78px;
-    height: 78px;
+    width: 96px;
+    height: 96px;
   }
   .fab-badge-top {
-    font-size: 8px;
+    font-size: 9px;
   }
   .fab-badge-amount {
-    font-size: 21px;
+    font-size: 26px;
   }
 }
 @media (prefers-reduced-motion: reduce) {
