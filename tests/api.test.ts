@@ -1,5 +1,6 @@
 import { GET as getSocial, POST as postSocial } from '@/app/api/social-links/route';
 import { describe, expect, it } from 'vitest';
+import { GET as getHealth } from '@/app/api/health/route';
 import { POST as postEnquiry } from '@/app/api/enquiries/route';
 import { GET as getProperties } from '@/app/api/properties/route';
 import { DELETE as signOut, GET as getSession, POST as signIn } from '@/app/api/team/session/route';
@@ -459,5 +460,16 @@ describe('referrals, social settings and listing lifecycle', () => {
       newHome: true,
       status: 'sold',
     });
+  });
+});
+
+describe('health check', () => {
+  it('reports liveness without touching the database, and database health on request', async () => {
+    const live = await getHealth(req('/api/health'));
+    expect(live.status).toBe(200);
+    expect(await live.json()).toEqual({ status: 'ok' });
+    const deep = await getHealth(req('/api/health?db=1'));
+    expect(deep.status).toBe(200);
+    expect((await deep.json()).database).toBe('ok');
   });
 });

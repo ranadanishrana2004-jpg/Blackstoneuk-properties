@@ -6,7 +6,7 @@ type Job = { enquiry_id: string; audience: 'team' | 'customer'; attempts: number
 type StoredEnquiry = EnquiryMail & { id: string; property_id: string };
 
 /** Durable per-recipient delivery. Leases allow safe operation across overlapping deploys. */
-export async function drainOutbox(limit = 10) {
+async function drainJobs(limit: number) {
   if (!process.env.BREVO_API_KEY) return;
   for (let i = 0; i < limit; i++) {
     const now = Date.now();
@@ -66,15 +66,43 @@ export async function drainOutbox(limit = 10) {
 const runtime = globalThis as unknown as {
   bsukMailTimer?: ReturnType<typeof setInterval>;
   bsukMailBusy?: boolean;
+  bsukMailWanted?: boolean;
 };
+
+/** Tells the background worker that there may be email to deliver or retry. */
+export function markMailWork() {
+  runtime.bsukMailWanted = true;
+}
+
+/** Called right after queueing mail: delivers a few jobs now and keeps the worker retrying. */
+export async function drainOutbox(limit = 10) {
+  markMailWork();
+  await drainJobs(limit);
+}
+
+/**
+ * Background retries. The worker only touches the database while work is pending, so an idle site
+ * lets a serverless database (Neon) scale to zero instead of being kept awake around the clock.
+ */
 export function startMailWorker() {
   if (runtime.bsukMailTimer) return;
+  runtime.bsukMailWanted = true; // one check shortly after start-up picks up anything left over
   const tick = async () => {
-    if (runtime.bsukMailBusy) return;
+    if (runtime.bsukMailBusy || !runtime.bsukMailWanted) return;
+    if (!process.env.BREVO_API_KEY) {
+      runtime.bsukMailWanted = false;
+      return;
+    }
     runtime.bsukMailBusy = true;
+    runtime.bsukMailWanted = false;
     try {
-      await drainOutbox();
+      await drainJobs(10);
+      const pending = await queryOne(
+        "SELECT 1 AS pending FROM mail_outbox WHERE status <> 'sent' AND attempts < 8 LIMIT 1",
+      );
+      if (pending) runtime.bsukMailWanted = true;
     } catch {
+      runtime.bsukMailWanted = true;
       console.error('Email queue processing interrupted; will retry.');
     } finally {
       runtime.bsukMailBusy = false;
