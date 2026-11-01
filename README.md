@@ -33,10 +33,10 @@ npm run build
 
 ## Deploying to Render
 
-`render.yaml` defines the web service; the PostgreSQL database is a separate Neon project whose
-connection string goes into `DATABASE_URL`. In Render choose
+`render.yaml` defines the web service and its own Render PostgreSQL database (`bsuk-db`), whose
+connection string is injected into `DATABASE_URL` automatically. In Render choose
 **New → Blueprint**, select this repository, and fill the prompted secrets
-(`DATABASE_URL`, `ADMIN_EMAIL`, `ADMIN_PASSWORD`, later `BREVO_API_KEY`). The first owner account is
+(`ADMIN_EMAIL`, `ADMIN_PASSWORD`, later `BREVO_API_KEY`). The first owner account is
 created from `ADMIN_EMAIL` / `ADMIN_PASSWORD` on first start; change the password from the workspace.
 
 ## Going live checklist

@@ -82,7 +82,7 @@ export async function drainOutbox(limit = 10) {
 
 /**
  * Background retries. The worker only touches the database while work is pending, so an idle site
- * lets a serverless database (Neon) scale to zero instead of being kept awake around the clock.
+ * lets a serverless database scale to zero instead of being kept awake around the clock.
  */
 export function startMailWorker() {
   if (runtime.bsukMailTimer) return;

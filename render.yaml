@@ -1,5 +1,5 @@
-# Render Blueprint: a single web service. The PostgreSQL database lives on Neon (free tier),
-# so this site shares nothing with any other Render service.
+# Render Blueprint: one web service plus its own PostgreSQL database, both private to this site.
+# Nothing here is shared with any other Render service.
 # Values marked `sync: false` are typed into the Render dashboard and never stored in git.
 services:
   - type: web
@@ -16,8 +16,10 @@ services:
     envVars:
       - key: NODE_VERSION
         value: 22
-      - key: DATABASE_URL # Neon connection string (secret)
-        sync: false
+      - key: DATABASE_URL # internal connection string of bsuk-db, injected by Render
+        fromDatabase:
+          name: bsuk-db
+          property: connectionString
       - key: SITE_URL
         value: https://www.bsukproperties.com
       - key: ADMIN_EMAIL
@@ -32,5 +34,11 @@ services:
         value: info@bsukproperties.com
       - key: CONTACT_PHONE
         value: '+44 800 043 7867'
-      - key: BREVO_API_KEY # added later, once the Brevo key exists (secret)
+      - key: BREVO_API_KEY # secret
         sync: false
+
+databases:
+  - name: bsuk-db
+    plan: basic-256mb
+    region: frankfurt # same region as the web service so they talk over Render's private network
+    postgresMajorVersion: '16'
