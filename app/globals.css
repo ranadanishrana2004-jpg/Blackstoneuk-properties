@@ -162,10 +162,21 @@ textarea:focus-visible {
   letter-spacing: 0.14em;
   color: var(--muted);
 }
-.top-strip span:last-child {
+.top-strip span:not(:first-child) {
   display: flex;
   align-items: center;
   gap: 12px;
+}
+.top-strip-contact {
+  letter-spacing: 0.06em;
+}
+.top-strip-contact a {
+  color: inherit;
+  text-decoration: none;
+  transition: color 0.2s;
+}
+.top-strip-contact a:hover {
+  color: var(--rose);
 }
 .top-strip i {
   width: 3px;
@@ -1089,6 +1100,9 @@ footer p {
   }
 }
 @media (max-width: 1200px) {
+  .top-strip-services {
+    display: none !important;
+  }
   .desktop-nav {
     gap: 15px;
     font-size: 13px;
@@ -1206,7 +1220,7 @@ footer p {
     font-size: 8px;
     padding: 10px 0;
   }
-  .top-strip span:last-child {
+  .top-strip span:not(:first-child) {
     display: none;
   }
   .nav-row {

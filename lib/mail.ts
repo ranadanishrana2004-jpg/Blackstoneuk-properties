@@ -131,7 +131,11 @@ export async function sendEnquiryEmail(
     });
 
   const contact = getContact();
-  const reach = [contact.phone && `Phone: ${contact.phone}`, `Email: ${contact.email}`]
+  const reach = [
+    contact.phone && `Office: ${contact.phone}`,
+    `Email: ${contact.email}`,
+    contact.address && `${COMPANY_NAME}, ${contact.address}`,
+  ]
     .filter(Boolean)
     .join(' · ');
   const finance =

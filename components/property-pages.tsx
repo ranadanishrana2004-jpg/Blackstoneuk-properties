@@ -16,6 +16,8 @@ import {
   ShieldCheck,
   Phone,
   Mail,
+  Globe,
+  ArrowUpRight,
 } from 'lucide-react';
 import { Dialog, DialogContent, DialogTitle, DialogDescription } from '@/components/ui/dialog';
 import {
@@ -27,7 +29,7 @@ import {
 import { Checkbox } from '@/components/ui/checkbox';
 import { Choice, PropertyCard, CallToAction, SavedContext } from './property-platform';
 import { formatPrice, isAvailable, statusLabel, type Property } from '@/lib/properties';
-import { COMPANY_NAME, COMPANY_NUMBER, telHref, type ContactInfo } from '@/lib/site';
+import { COMPANY_NAME, COMPANY_NUMBER, mapsHref, telHref, type ContactInfo } from '@/lib/site';
 import { REFERRALS, isReferralKind } from '@/lib/referrals';
 
 export function Intro({
@@ -1002,22 +1004,62 @@ export function ContactPage({
               We aim to reply to every enquiry promptly. An appointment is confirmed only once you
               have agreed a time with the team.
             </p>
-            <ul className="contact-list">
-              {contact.phone && (
-                <li>
-                  <Phone size={16} /> <a href={telHref(contact.phone)}>{contact.phone}</a>
-                </li>
-              )}
-              <li>
-                <Mail size={16} /> <a href={'mailto:' + contact.email}>{contact.email}</a>
-              </li>
+            <dl className="contact-card">
               {contact.address && (
-                <li>
-                  <MapPin size={16} /> {contact.address}
-                </li>
+                <div className="contact-card-row">
+                  <dt>
+                    <MapPin size={15} aria-hidden="true" /> Our office
+                  </dt>
+                  <dd>
+                    <span className="contact-card-address">
+                      {contact.addressLines.map((line) => (
+                        <span key={line}>{line}</span>
+                      ))}
+                    </span>
+                    <a
+                      className="text-link contact-card-directions"
+                      href={mapsHref(contact.address)}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      Get directions <ArrowUpRight size={14} aria-hidden="true" />
+                    </a>
+                  </dd>
+                </div>
               )}
-              {contact.hours && <li>{contact.hours}</li>}
-            </ul>
+              {contact.phone && (
+                <div className="contact-card-row">
+                  <dt>
+                    <Phone size={15} aria-hidden="true" /> Telephone
+                  </dt>
+                  <dd>
+                    <a href={telHref(contact.phone)}>{contact.phone}</a>
+                  </dd>
+                </div>
+              )}
+              <div className="contact-card-row">
+                <dt>
+                  <Mail size={15} aria-hidden="true" /> Email
+                </dt>
+                <dd>
+                  <a href={'mailto:' + contact.email}>{contact.email}</a>
+                </dd>
+              </div>
+              <div className="contact-card-row">
+                <dt>
+                  <Globe size={15} aria-hidden="true" /> Website
+                </dt>
+                <dd>
+                  <a href={'https://' + contact.website}>{contact.website}</a>
+                </dd>
+              </div>
+              {contact.hours && (
+                <div className="contact-card-row">
+                  <dt>Opening hours</dt>
+                  <dd>{contact.hours}</dd>
+                </div>
+              )}
+            </dl>
             {!valuation && (
               <div className="company-registration">
                 <strong>{contact.companyName}</strong>

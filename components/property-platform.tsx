@@ -20,6 +20,7 @@ import {
   Phone,
   MessageCircle,
   Mail,
+  Globe,
 } from 'lucide-react';
 import { Sheet, SheetContent, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
@@ -33,7 +34,7 @@ import {
 import { Toaster } from '@/components/ui/sonner';
 import { toast } from 'sonner';
 import { formatPrice, isAvailable, statusLabel, type Property } from '@/lib/properties';
-import { telHref, type ContactInfo } from '@/lib/site';
+import { mapsHref, telHref, type ContactInfo } from '@/lib/site';
 import { BrandMark, BrandMotion } from '@/components/brand-motion';
 import { ReferralWidget } from '@/components/referral-widget';
 export const SavedContext = createContext<{ saved: string[]; toggle: (id: string) => void }>({
@@ -106,8 +107,25 @@ export function Shell({ children, contact }: { children: React.ReactNode; contac
       </a>
       <div className="top-strip">
         <span>A MORE PERSONAL APPROACH TO PROPERTY</span>
-        <span>
+        <span className="top-strip-services">
           SALES <i /> LETTINGS <i /> HALAL MORTGAGES
+        </span>
+        <span className="top-strip-contact">
+          {contact.phone && (
+            <>
+              <a href={telHref(contact.phone)}>Call {contact.phone}</a>
+              <i />
+            </>
+          )}
+          <a href={'mailto:' + contact.email}>{contact.email}</a>
+          {contact.addressLines.length > 0 && (
+            <>
+              <i />
+              <a href={mapsHref(contact.address)} target="_blank" rel="noopener noreferrer">
+                {contact.addressLines[contact.addressLines.length - 1]}
+              </a>
+            </>
+          )}
         </span>
       </div>
       <header className="site-header">
@@ -206,22 +224,53 @@ export function Shell({ children, contact }: { children: React.ReactNode; contac
               A place to belong.
               <br />A partner for every chapter.
             </p>
-            <div className="footer-detail">{contact.companyName}</div>
             <address className="footer-contact">
-              {contact.phone && (
-                <a href={telHref(contact.phone)}>
-                  <Phone size={14} /> {contact.phone}
+              <strong className="footer-company">{contact.companyName}</strong>
+              {contact.address && (
+                <a
+                  className="footer-address"
+                  href={mapsHref(contact.address)}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label={`${contact.address} (opens Google Maps)`}
+                >
+                  <MapPin size={14} aria-hidden="true" />
+                  <span>
+                    {contact.addressLines.map((line) => (
+                      <span key={line}>{line}</span>
+                    ))}
+                  </span>
                 </a>
               )}
-              <a href={'mailto:' + contact.email}>
-                <Mail size={14} /> {contact.email}
-              </a>
-              {contact.address && (
-                <span>
-                  <MapPin size={14} /> {contact.address}
-                </span>
-              )}
-              {contact.hours && <span>{contact.hours}</span>}
+              <dl className="footer-details">
+                {contact.phone && (
+                  <div>
+                    <dt>
+                      <Phone size={13} aria-hidden="true" /> Office
+                    </dt>
+                    <dd>
+                      <a href={telHref(contact.phone)}>{contact.phone}</a>
+                    </dd>
+                  </div>
+                )}
+                <div>
+                  <dt>
+                    <Mail size={13} aria-hidden="true" /> Email
+                  </dt>
+                  <dd>
+                    <a href={'mailto:' + contact.email}>{contact.email}</a>
+                  </dd>
+                </div>
+                <div>
+                  <dt>
+                    <Globe size={13} aria-hidden="true" /> Web
+                  </dt>
+                  <dd>
+                    <a href={'https://' + contact.website}>{contact.website}</a>
+                  </dd>
+                </div>
+              </dl>
+              {contact.hours && <span className="footer-hours">{contact.hours}</span>}
             </address>
             <SocialLinks />
           </div>

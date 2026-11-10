@@ -13,6 +13,10 @@ export type ContactInfo = {
   phone: string;
   whatsapp: string;
   address: string;
+  /** The office address split into display lines, e.g. street, road, town and postcode. */
+  addressLines: string[];
+  /** Public website host without protocol, e.g. www.bsukproperties.com. */
+  website: string;
   hours: string;
   companyNumber: string;
   registeredOffice: string;
@@ -38,18 +42,35 @@ export function siteUrl(): string {
   return clean(process.env.SITE_URL).replace(/\/$/, '') || 'http://localhost:3000';
 }
 
+export const DEFAULT_WEBSITE = 'www.bsukproperties.com';
+
+/** The public site host for display, falling back to the company domain in local development. */
+export function websiteHost(): string {
+  try {
+    const host = new URL(siteUrl()).host;
+    if (host && !/^(localhost|127\.0\.0\.1|\[::1\])(:\d+)?$/.test(host)) return host;
+  } catch {}
+  return DEFAULT_WEBSITE;
+}
+
 export function contactEmail(): string {
   return clean(process.env.CONTACT_EMAIL) || 'info@bsukproperties.com';
 }
 
 /** Read on the server and passed to client components as props. */
 export function getContact(): ContactInfo {
+  const address = clean(process.env.OFFICE_ADDRESS) || OFFICE_ADDRESS;
   return {
     companyName: COMPANY_NAME,
     email: contactEmail(),
     phone: clean(process.env.CONTACT_PHONE) || OFFICE_PHONE,
     whatsapp: clean(process.env.WHATSAPP_NUMBER).replace(/[^\d]/g, ''),
-    address: clean(process.env.OFFICE_ADDRESS) || OFFICE_ADDRESS,
+    address,
+    addressLines: address
+      .split(',')
+      .map((line) => line.trim())
+      .filter(Boolean),
+    website: websiteHost(),
     hours: clean(process.env.OPENING_HOURS),
     companyNumber: COMPANY_NUMBER,
     registeredOffice: clean(process.env.REGISTERED_OFFICE),
@@ -63,4 +84,9 @@ export function getContact(): ContactInfo {
 
 export function telHref(phone: string): string {
   return 'tel:' + phone.replace(/[^\d+]/g, '');
+}
+
+/** A Google Maps search link for an address. */
+export function mapsHref(address: string): string {
+  return 'https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent(address);
 }

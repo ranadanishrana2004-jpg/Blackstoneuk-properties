@@ -705,23 +705,77 @@
 }
 .footer-contact {
   display: grid;
-  gap: 8px;
-  margin-top: 16px;
+  gap: 14px;
+  margin-top: 22px;
   font-style: normal;
-  font-size: 14px;
+  font-size: 13px;
+  line-height: 1.6;
+  color: var(--muted);
 }
-.footer-contact a,
-.footer-contact span {
-  display: flex;
-  align-items: center;
-  gap: 8px;
+.footer-company {
+  font:
+    600 11px/1.5 Arial,
+    sans-serif;
+  letter-spacing: 0.17em;
+  text-transform: uppercase;
+  color: var(--text);
+}
+.footer-contact a {
   color: inherit;
-  opacity: 0.85;
   text-decoration: none;
+  transition: color 0.2s;
 }
 .footer-contact a:hover {
-  opacity: 1;
-  text-decoration: underline;
+  color: var(--rose);
+}
+.footer-address {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+}
+.footer-address svg {
+  margin-top: 4px;
+  flex-shrink: 0;
+  color: var(--rose);
+}
+.footer-address > span {
+  display: grid;
+}
+.footer-details {
+  display: grid;
+  gap: 8px;
+  margin: 0;
+  padding-top: 14px;
+  border-top: 1px solid var(--line);
+}
+.footer-details > div {
+  display: grid;
+  grid-template-columns: 74px 1fr;
+  align-items: center;
+  gap: 10px;
+}
+.footer-details dt {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font:
+    600 10px/1.5 Arial,
+    sans-serif;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--muted);
+  opacity: 0.85;
+}
+.footer-details dt svg {
+  color: var(--rose);
+}
+.footer-details dd {
+  margin: 0;
+  color: var(--text);
+  overflow-wrap: anywhere;
+}
+.footer-hours {
+  font-size: 12px;
 }
 .footer-legal {
   padding-bottom: 28px;
@@ -890,6 +944,69 @@
   width: 100%;
 }
 
+.contact-card {
+  margin: 26px 0 0;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  box-shadow: var(--shadow);
+}
+.contact-card-row {
+  display: grid;
+  grid-template-columns: 150px 1fr;
+  gap: 16px;
+  padding: 16px 22px;
+}
+.contact-card-row + .contact-card-row {
+  border-top: 1px solid var(--line);
+}
+.contact-card dt {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  align-self: start;
+  padding-top: 2px;
+  font:
+    600 11px/1.5 Arial,
+    sans-serif;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.contact-card dt svg {
+  color: var(--rose);
+  flex-shrink: 0;
+}
+.contact-card dd {
+  margin: 0;
+  font-size: 15px;
+  line-height: 1.6;
+  overflow-wrap: anywhere;
+}
+.contact-card dd a:not(.text-link) {
+  color: var(--text);
+  text-decoration: none;
+}
+.contact-card dd a:not(.text-link):hover {
+  color: var(--rose);
+}
+.contact-card-address {
+  display: grid;
+}
+.contact-card-directions {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  margin-top: 8px;
+  font-size: 13px;
+}
+@media (max-width: 560px) {
+  .contact-card-row {
+    grid-template-columns: 1fr;
+    gap: 6px;
+    padding: 14px 18px;
+  }
+}
 .company-registration {
   border-left: 2px solid var(--rose);
   padding: 16px 20px;
