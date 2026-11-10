@@ -1,4 +1,4 @@
-# Blackstone UK Property Ltd — website and team workspace
+# Blackstone UK Properties Ltd — website and team workspace
 
 Next.js 16 (App Router) on Node, PostgreSQL, Tailwind 4. Deployed on Render.
 

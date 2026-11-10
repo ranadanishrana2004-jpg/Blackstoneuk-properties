@@ -33,7 +33,9 @@ services:
       - key: NOTIFY_EMAIL
         value: info@bsukproperties.com
       - key: CONTACT_PHONE
-        value: '+44 800 043 7867'
+        value: '0800 043 7867'
+      - key: OFFICE_ADDRESS
+        value: 'Flexspace Office 46, Manchester Road, Bolton BL3 2NZ'
       - key: BREVO_API_KEY # secret
         sync: false
 

@@ -5,7 +5,15 @@ import './brand-motion.css';
 import './portal.css';
 import './referral.css';
 import { Shell } from '@/components/property-platform';
-import { COMPANY_NAME, getContact, siteUrl } from '@/lib/site';
+import {
+  COMPANY_NAME,
+  getContact,
+  OFFICE_ADDRESS,
+  OFFICE_POSTCODE,
+  OFFICE_STREET,
+  OFFICE_TOWN,
+  siteUrl,
+} from '@/lib/site';
 
 const description =
   'Distinctive homes to buy and rent, personal valuations and Halal mortgage enquiries. Blackstone UK Properties Ltd: a more personal approach to property.';
@@ -59,11 +67,20 @@ export default function Layout({ children }: { children: React.ReactNode }) {
     ...(contact.phone ? { telephone: contact.phone } : {}),
     ...(contact.address
       ? {
-          address: {
-            '@type': 'PostalAddress',
-            streetAddress: contact.address,
-            addressCountry: 'GB',
-          },
+          address:
+            contact.address === OFFICE_ADDRESS
+              ? {
+                  '@type': 'PostalAddress',
+                  streetAddress: OFFICE_STREET,
+                  addressLocality: OFFICE_TOWN,
+                  postalCode: OFFICE_POSTCODE,
+                  addressCountry: 'GB',
+                }
+              : {
+                  '@type': 'PostalAddress',
+                  streetAddress: contact.address,
+                  addressCountry: 'GB',
+                },
         }
       : {}),
     areaServed: 'GB',
