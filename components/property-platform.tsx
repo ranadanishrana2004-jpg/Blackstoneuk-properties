@@ -21,6 +21,11 @@ import {
   MessageCircle,
   Mail,
   Globe,
+  Check,
+  CalendarCheck,
+  FileSignature,
+  ShieldCheck,
+  ArrowRight,
 } from 'lucide-react';
 import { Sheet, SheetContent, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
@@ -34,7 +39,7 @@ import {
 import { Toaster } from '@/components/ui/sonner';
 import { toast } from 'sonner';
 import { formatPrice, isAvailable, statusLabel, type Property } from '@/lib/properties';
-import { mapsHref, telHref, type ContactInfo } from '@/lib/site';
+import { mapsHref, OFFICE_PHONE, telHref, type ContactInfo } from '@/lib/site';
 import { BrandMark, BrandMotion } from '@/components/brand-motion';
 import { ReferralWidget } from '@/components/referral-widget';
 export const SavedContext = createContext<{ saved: string[]; toggle: (id: string) => void }>({
@@ -177,6 +182,9 @@ export function Shell({ children, contact }: { children: React.ReactNode; contac
                       {name}
                     </Link>
                   ))}
+                  <Link href="/#guaranteed-rent" onClick={() => setMenu(false)}>
+                    Guaranteed rent
+                  </Link>
                   <Link href="/valuation" onClick={() => setMenu(false)}>
                     Book a valuation
                   </Link>
@@ -283,6 +291,7 @@ export function Shell({ children, contact }: { children: React.ReactNode; contac
             <Link href="/refer-a-seller">Refer a seller · Earn £100</Link>
             <Link href="/refer-a-landlord">Find a landlord · Earn £150</Link>
             <Link href="/landlords">Let your property</Link>
+            <Link href="/#guaranteed-rent">Guaranteed rent</Link>
           </div>
           <div>
             <h3>Here to help</h3>
@@ -566,6 +575,105 @@ const services = [
     icon: Building2,
   },
 ];
+const guaranteedRentBenefits: [string, string][] = [
+  ['Paid even if the property is empty', 'no void months, no lost rent between tenants.'],
+  ["Paid even if the tenant doesn't pay", 'arrears are our problem, not yours.'],
+  ['No tenant calls, viewings or chasing', 'one point of contact: us.'],
+  [
+    'Property returned in the condition we took it',
+    'fair wear and tear excepted, as set out in the lease.',
+  ],
+];
+
+const guaranteedRentSteps = [
+  'Free rental assessment',
+  'Fixed offer & company lease',
+  'Paid every month',
+];
+
+export function GuaranteedRent() {
+  return (
+    <section
+      className="guaranteed-rent"
+      id="guaranteed-rent"
+      aria-labelledby="guaranteed-rent-title"
+    >
+      <div className="container gr-grid">
+        <div className="gr-copy reveal">
+          <span className="eyebrow line">GUARANTEED RENT</span>
+          <h2 id="guaranteed-rent-title">
+            Guaranteed Rent for Landlords in <em>Bolton &amp; Greater Manchester</em>
+          </h2>
+          <p className="gr-lead">
+            One fixed payment, on the same date every month, for 3–5 years — paid even when your
+            property is empty. BSUK Properties becomes your tenant on a company lease. We find the
+            tenants, manage the property and take the voids. <strong>You just get paid.</strong>
+          </p>
+          <ul className="gr-benefits">
+            {guaranteedRentBenefits.map(([lead, rest]) => (
+              <li key={lead}>
+                <span className="gr-check" aria-hidden="true">
+                  <Check size={14} strokeWidth={2.5} />
+                </span>
+                <span>
+                  <strong>{lead}</strong>
+                  {lead.startsWith('Property returned') ? ', ' : ' — '}
+                  {rest}
+                </span>
+              </li>
+            ))}
+          </ul>
+          <div className="gr-actions">
+            <Link className="button gr-primary" href="/contact?kind=landlord">
+              Get your guaranteed rent offer <ArrowRight size={16} aria-hidden="true" />
+            </Link>
+            <a className="button gr-call" href={telHref(OFFICE_PHONE)}>
+              <Phone size={16} aria-hidden="true" /> Call {OFFICE_PHONE}
+            </a>
+          </div>
+        </div>
+        <div className="gr-visual reveal">
+          <img
+            src="/images/manor.webp"
+            alt="Period home let through a guaranteed rent agreement — illustrative photography"
+            loading="lazy"
+            width={900}
+            height={1100}
+          />
+          <div className="gr-glass">
+            <span className="gr-glass-label">At a glance</span>
+            <ul>
+              <li>
+                <CalendarCheck size={18} aria-hidden="true" /> Fixed monthly rent
+              </li>
+              <li>
+                <FileSignature size={18} aria-hidden="true" /> 3–5 year company lease
+              </li>
+              <li>
+                <ShieldCheck size={18} aria-hidden="true" /> Zero voids
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <ol className="container gr-steps" aria-label="How guaranteed rent works">
+        {guaranteedRentSteps.map((step, i) => (
+          <li
+            key={step}
+            className="reveal"
+            style={{ '--delay': `${i * 90}ms` } as React.CSSProperties}
+          >
+            <span className="gr-step-number">{i + 1}</span>
+            <span className="gr-step-text">{step}</span>
+            {i < guaranteedRentSteps.length - 1 && (
+              <ArrowRight className="gr-step-arrow" size={18} aria-hidden="true" />
+            )}
+          </li>
+        ))}
+      </ol>
+    </section>
+  );
+}
 export function Home({ featured }: { featured: Property[] }) {
   return (
     <main id="main" className="portal-home">
@@ -613,6 +721,7 @@ export function Home({ featured }: { featured: Property[] }) {
           </Link>
         ))}
       </div>
+      <GuaranteedRent />
       <section className="container section portal-featured">
         <div className="section-heading reveal">
           <div>
