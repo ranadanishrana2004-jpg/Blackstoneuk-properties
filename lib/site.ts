@@ -31,7 +31,8 @@ export const COMPANY_NAME = 'Blackstone UK Properties Ltd';
 // Company number supplied on the client's certificate of incorporation.
 export const COMPANY_NUMBER = '17493466';
 
-// Office details supplied by the client. Environment variables of the same purpose override them.
+// Office details supplied by the client. The phone is fixed in code and always shown as written;
+// OFFICE_ADDRESS may still be overridden by the environment variable of the same name.
 export const OFFICE_PHONE = '0800 043 7867';
 export const OFFICE_STREET = 'Flexspace Office 46, Manchester Road';
 export const OFFICE_TOWN = 'Bolton';
@@ -63,7 +64,7 @@ export function getContact(): ContactInfo {
   return {
     companyName: COMPANY_NAME,
     email: contactEmail(),
-    phone: clean(process.env.CONTACT_PHONE) || OFFICE_PHONE,
+    phone: OFFICE_PHONE,
     whatsapp: clean(process.env.WHATSAPP_NUMBER).replace(/[^\d]/g, ''),
     address,
     addressLines: address
