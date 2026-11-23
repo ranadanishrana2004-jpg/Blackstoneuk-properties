@@ -5,6 +5,7 @@ import './brand-motion.css';
 import './portal.css';
 import './referral.css';
 import { Shell } from '@/components/property-platform';
+import { Snowfall } from '@/components/snowfall';
 import {
   COMPANY_NAME,
   getContact,
@@ -98,6 +99,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
       </head>
       <body>
         <Shell contact={contact}>{children}</Shell>
+        <Snowfall />
       </body>
     </html>
   );
