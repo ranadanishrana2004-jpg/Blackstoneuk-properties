@@ -4,11 +4,13 @@ import { useEffect, useRef } from 'react';
 import { usePathname } from 'next/navigation';
 
 /**
- * Seasonal falling-snow overlay.
+ * Seasonal falling-snow overlay, modelled on the festive menu-board look:
  *
- * Three kinds of flake, layered by depth: soft round "bokeh" snow (most of them),
- * six-armed crystal snowflakes that slowly turn, and small twinkling sparkles.
+ * - A dense, glittering band of icy-blue snow along the top edge (round flakes, little
+ *   hearts, four-point stars and tiny snowflakes) that slowly drifts down and melts away.
+ * - Small white flakes that break off and fall gently all the way down the page.
  *
+ * Safety:
  * - One fixed <canvas>, pointer-events: none, so it never blocks clicks, scrolling or forms.
  * - Sits above the sticky header (z-index 40) but below dialogs and menus (z-index 50).
  * - Turns itself off outside the season window below, on /manage, for users who prefer
@@ -25,7 +27,7 @@ const SEASON_END = { month: 1, day: 6 };
 const HIDDEN_ON = ['/manage'];
 
 // Positioning lives inline so the overlay never depends on the global stylesheet
-// (the production CSS bundle shipped without the .snowfall rule).
+// (the production CSS bundle once shipped without the .snowfall rule).
 const OVERLAY_STYLE: React.CSSProperties = {
   position: 'fixed',
   inset: 0,
@@ -36,8 +38,10 @@ const OVERLAY_STYLE: React.CSSProperties = {
   userSelect: 'none',
 };
 
-// A faint cool edge keeps white snow readable on the site's cream background.
-const EDGE = 'rgba(140,160,190,';
+const ICE = '#a8d0f6'; // icy blue of the reference snow
+const SNOW = '#ffffff';
+// A faint cool outline keeps the snow readable on the site's cream background.
+const OUTLINE = 'rgba(120,145,185,0.45)';
 
 function inSeason(now: Date) {
   const value = (now.getMonth() + 1) * 100 + now.getDate();
@@ -46,10 +50,11 @@ function inSeason(now: Date) {
   return start <= end ? value >= start && value <= end : value >= start || value <= end;
 }
 
-type Kind = 'dot' | 'crystal' | 'sparkle';
+type Shape = 'dot' | 'heart' | 'star' | 'flake' | 'speck';
 
 type Flake = {
-  kind: Kind;
+  shape: Shape;
+  band: boolean; // part of the glittering top band (fades out) or a long faller
   x: number;
   y: number;
   size: number;
@@ -60,100 +65,123 @@ type Flake = {
   alpha: number;
   angle: number;
   spin: number;
-  twinkle: number;
+  fadeFrom: number;
+  fadeTo: number;
 };
 
-function newCanvas(size: number) {
+const SPRITE = 64;
+
+function sprite(draw: (ctx: CanvasRenderingContext2D, r: number) => void) {
   const canvas = document.createElement('canvas');
-  canvas.width = canvas.height = size;
-  return { canvas, ctx: canvas.getContext('2d') };
-}
-
-/** Soft round snow with a bright core: reads as bokeh when drawn large. */
-function makeDot(size: number) {
-  const { canvas, ctx } = newCanvas(size);
+  canvas.width = canvas.height = SPRITE;
+  const ctx = canvas.getContext('2d');
   if (!ctx) return null;
-  const c = size / 2;
-  const g = ctx.createRadialGradient(c, c, 0, c, c, c);
-  g.addColorStop(0, 'rgba(255,255,255,1)');
-  g.addColorStop(0.42, 'rgba(255,255,255,0.95)');
-  g.addColorStop(0.62, EDGE + '0.4)');
-  g.addColorStop(1, EDGE + '0)');
-  ctx.fillStyle = g;
-  ctx.fillRect(0, 0, size, size);
+  ctx.translate(SPRITE / 2, SPRITE / 2);
+  draw(ctx, SPRITE * 0.38);
   return canvas;
 }
 
-/** Six-armed crystal snowflake with side branches and a soft glow. */
-function makeCrystal(size: number) {
-  const { canvas, ctx } = newCanvas(size);
-  if (!ctx) return null;
-  const c = size / 2;
-  const arm = size * 0.4;
-  ctx.translate(c, c);
-  ctx.lineCap = 'round';
-  const drawArms = () => {
-    for (let i = 0; i < 6; i++) {
-      ctx.save();
-      ctx.rotate((i * Math.PI) / 3);
+/** Fill a path in icy blue with a thin cool outline and a soft white highlight. */
+function paint(ctx: CanvasRenderingContext2D, r: number, path: () => void, color = ICE) {
+  ctx.lineJoin = 'round';
+  path();
+  ctx.lineWidth = r * 0.16;
+  ctx.strokeStyle = OUTLINE;
+  ctx.stroke();
+  ctx.shadowColor = 'rgba(255,255,255,0.8)';
+  ctx.shadowBlur = r * 0.25;
+  ctx.fillStyle = color;
+  ctx.fill();
+  ctx.shadowBlur = 0;
+  const hi = ctx.createRadialGradient(-r * 0.3, -r * 0.3, 0, -r * 0.3, -r * 0.3, r * 0.8);
+  hi.addColorStop(0, 'rgba(255,255,255,0.75)');
+  hi.addColorStop(1, 'rgba(255,255,255,0)');
+  ctx.fillStyle = hi;
+  ctx.fill();
+}
+
+function makeSprites() {
+  const dot = sprite((ctx, r) =>
+    paint(ctx, r, () => {
       ctx.beginPath();
-      ctx.moveTo(0, 0);
-      ctx.lineTo(0, -arm);
-      for (const [at, len] of [
-        [0.45, 0.22],
-        [0.7, 0.16],
-      ]) {
-        ctx.moveTo(0, -arm * at);
-        ctx.lineTo(-arm * len, -arm * (at + len));
-        ctx.moveTo(0, -arm * at);
-        ctx.lineTo(arm * len, -arm * (at + len));
+      ctx.arc(0, 0, r * 0.85, 0, Math.PI * 2);
+    }),
+  );
+  const speck = sprite((ctx, r) =>
+    paint(
+      ctx,
+      r,
+      () => {
+        ctx.beginPath();
+        ctx.arc(0, 0, r * 0.85, 0, Math.PI * 2);
+      },
+      SNOW,
+    ),
+  );
+  const heart = sprite((ctx, r) =>
+    paint(ctx, r, () => {
+      ctx.beginPath();
+      ctx.moveTo(0, r * 0.85);
+      ctx.bezierCurveTo(-r * 1.15, 0, -r * 0.75, -r * 0.95, 0, -r * 0.4);
+      ctx.bezierCurveTo(r * 0.75, -r * 0.95, r * 1.15, 0, 0, r * 0.85);
+      ctx.closePath();
+    }),
+  );
+  const star = sprite((ctx, r) =>
+    paint(ctx, r, () => {
+      // Soft four-point star, like the twinkles in the reference.
+      ctx.beginPath();
+      for (let i = 0; i < 4; i++) {
+        const a = (i * Math.PI) / 2 - Math.PI / 2;
+        const b = a + Math.PI / 4;
+        ctx.lineTo(Math.cos(a) * r, Math.sin(a) * r);
+        ctx.quadraticCurveTo(
+          Math.cos(b) * r * 0.18,
+          Math.sin(b) * r * 0.18,
+          Math.cos(a + Math.PI / 2) * r,
+          Math.sin(a + Math.PI / 2) * r,
+        );
       }
-      ctx.stroke();
-      ctx.restore();
+      ctx.closePath();
+    }),
+  );
+  const flake = sprite((ctx, r) => {
+    ctx.lineCap = 'round';
+    ctx.beginPath();
+    for (let i = 0; i < 6; i++) {
+      const a = (i * Math.PI) / 3;
+      const ca = Math.cos(a);
+      const sa = Math.sin(a);
+      ctx.moveTo(0, 0);
+      ctx.lineTo(ca * r, sa * r);
+      // one pair of side branches per arm
+      const bx = ca * r * 0.55;
+      const by = sa * r * 0.55;
+      for (const side of [-1, 1]) {
+        const b = a + side * 0.75;
+        ctx.moveTo(bx, by);
+        ctx.lineTo(bx + Math.cos(b) * r * 0.3, by + Math.sin(b) * r * 0.3);
+      }
     }
-  };
-  // Outer cool outline, then the white crystal on top.
-  ctx.strokeStyle = EDGE + '0.45)';
-  ctx.lineWidth = size * 0.07;
-  drawArms();
-  ctx.shadowColor = 'rgba(255,255,255,0.9)';
-  ctx.shadowBlur = size * 0.08;
-  ctx.strokeStyle = 'rgba(255,255,255,1)';
-  ctx.lineWidth = size * 0.035;
-  drawArms();
-  ctx.beginPath();
-  ctx.arc(0, 0, size * 0.05, 0, Math.PI * 2);
-  ctx.fillStyle = '#fff';
-  ctx.fill();
-  return canvas;
+    ctx.strokeStyle = OUTLINE;
+    ctx.lineWidth = r * 0.3;
+    ctx.stroke();
+    ctx.shadowColor = 'rgba(255,255,255,0.8)';
+    ctx.shadowBlur = r * 0.2;
+    ctx.strokeStyle = ICE;
+    ctx.lineWidth = r * 0.17;
+    ctx.stroke();
+  });
+  if (!dot || !speck || !heart || !star || !flake) return null;
+  return { dot, speck, heart, star, flake };
 }
 
-/** Four-point twinkle with a warm glow, like light catching the snow. */
-function makeSparkle(size: number) {
-  const { canvas, ctx } = newCanvas(size);
-  if (!ctx) return null;
-  const c = size / 2;
-  const glow = ctx.createRadialGradient(c, c, 0, c, c, c * 0.6);
-  glow.addColorStop(0, 'rgba(255,244,214,0.9)');
-  glow.addColorStop(1, 'rgba(255,236,200,0)');
-  ctx.fillStyle = glow;
-  ctx.fillRect(0, 0, size, size);
-  ctx.translate(c, c);
-  ctx.fillStyle = '#fff';
-  ctx.shadowColor = 'rgba(255,240,205,1)';
-  ctx.shadowBlur = size * 0.1;
-  ctx.beginPath();
-  const long = size * 0.46;
-  const thin = size * 0.06;
-  for (let i = 0; i < 4; i++) {
-    const a = (i * Math.PI) / 2;
-    const b = a + Math.PI / 4;
-    ctx.lineTo(Math.cos(a) * long, Math.sin(a) * long);
-    ctx.lineTo(Math.cos(b) * thin, Math.sin(b) * thin);
-  }
-  ctx.closePath();
-  ctx.fill();
-  return canvas;
+function pickBandShape(): Shape {
+  const roll = Math.random();
+  if (roll < 0.58) return 'dot';
+  if (roll < 0.74) return 'heart';
+  if (roll < 0.88) return 'star';
+  return 'flake';
 }
 
 export function Snowfall() {
@@ -165,56 +193,109 @@ export function Snowfall() {
     const canvas = canvasRef.current;
     if (hidden || !canvas || !inSeason(new Date())) return;
     const ctx = canvas.getContext('2d');
-    const dotSprite = makeDot(64);
-    const crystalSprite = makeCrystal(96);
-    const sparkleSprite = makeSparkle(64);
-    if (!ctx || !dotSprite || !crystalSprite || !sparkleSprite) return;
-    const sprites = { dot: dotSprite, crystal: crystalSprite, sparkle: sparkleSprite };
+    const sprites = makeSprites();
+    if (!ctx || !sprites) return;
 
     const motion = window.matchMedia('(prefers-reduced-motion: reduce)');
-    const flakes: Flake[] = [];
+    const band: Flake[] = [];
+    const fallers: Flake[] = [];
     let width = 0;
     let height = 0;
+    let dpr = 1;
     let frame = 0;
     let last = 0;
 
-    const spawn = (anywhere: boolean): Flake => {
-      const roll = Math.random();
-      const kind: Kind = roll < 0.12 ? 'crystal' : roll < 0.2 ? 'sparkle' : 'dot';
-      const depth = Math.random(); // 0 = far, 1 = near
+    // Band flakes sit along the top edge, drift down slowly and melt away.
+    const spawnBand = (initial: boolean): Flake => {
+      const shape = pickBandShape();
+      const small = width < 640;
       const size =
-        kind === 'crystal'
-          ? 10 + depth * 14
-          : kind === 'sparkle'
-            ? 7 + depth * 9
-            : 3 + depth * depth * 11; // a few big, soft bokeh flakes up close
+        (shape === 'dot' ? 4 + Math.random() * 7 : 7 + Math.random() * 8) * (small ? 0.8 : 1);
+      const reach = (small ? 70 : 110) + Math.random() * (small ? 90 : 150);
+      const fadeFrom = reach * (0.25 + Math.random() * 0.35);
       return {
-        kind,
+        shape,
+        band: true,
         x: Math.random() * width,
-        y: anywhere ? Math.random() * height : -size,
+        // Start biased to the very top so the band looks densest at the edge.
+        y: initial ? Math.pow(Math.random(), 1.8) * reach - size : -size - Math.random() * 30,
         size,
-        speed: (kind === 'crystal' ? 20 : 24) + depth * 46, // px per second
-        drift: (Math.random() - 0.5) * 14,
+        speed: 6 + Math.random() * 14,
+        drift: (Math.random() - 0.5) * 6,
         phase: Math.random() * Math.PI * 2,
-        sway: 0.4 + Math.random() * 0.8,
-        alpha: kind === 'dot' ? 0.4 + depth * 0.5 - (depth > 0.85 ? 0.25 : 0) : 0.75 + depth * 0.25,
-        angle: Math.random() * Math.PI * 2,
-        spin: (Math.random() - 0.5) * 0.9,
-        twinkle: 1.5 + Math.random() * 2.5,
+        sway: 0.3 + Math.random() * 0.6,
+        alpha: 0.75 + Math.random() * 0.25,
+        angle: shape === 'heart' ? (Math.random() - 0.5) * 0.6 : Math.random() * Math.PI * 2,
+        spin: shape === 'flake' || shape === 'star' ? (Math.random() - 0.5) * 0.5 : 0,
+        fadeFrom,
+        fadeTo: reach,
       };
     };
 
+    // Small white flakes that fall gently down the whole page.
+    const spawnFaller = (initial: boolean): Flake => {
+      const depth = Math.random();
+      const size = 2.5 + depth * 4.5;
+      return {
+        shape: 'speck',
+        band: false,
+        x: Math.random() * width,
+        y: initial ? Math.random() * height : -size - Math.random() * 40,
+        size,
+        speed: 28 + depth * 42,
+        drift: (Math.random() - 0.5) * 12,
+        phase: Math.random() * Math.PI * 2,
+        sway: 0.4 + Math.random() * 0.8,
+        alpha: 0.65 + depth * 0.35,
+        angle: 0,
+        spin: 0,
+        fadeFrom: Infinity,
+        fadeTo: Infinity,
+      };
+    };
+
+    const fill = (list: Flake[], target: number, make: (initial: boolean) => Flake) => {
+      if (list.length > target) list.length = target;
+      while (list.length < target) list.push(make(true));
+    };
+
     const resize = () => {
-      const dpr = Math.min(window.devicePixelRatio || 1, 2);
+      dpr = Math.min(window.devicePixelRatio || 1, 2);
       width = window.innerWidth;
       height = window.innerHeight;
       canvas.width = Math.round(width * dpr);
       canvas.height = Math.round(height * dpr);
-      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-      // Density scales with screen area: roughly 45 flakes on a phone, up to 150 on desktop.
-      const target = Math.round(Math.min(150, Math.max(40, (width * height) / 8000)));
-      if (flakes.length > target) flakes.length = target;
-      while (flakes.length < target) flakes.push(spawn(true));
+      // About 50 band flakes + 25 fallers on a phone, up to 170 + 60 on a wide desktop.
+      fill(band, Math.round(Math.min(170, Math.max(45, width / 8))), spawnBand);
+      fill(fallers, Math.round(Math.min(60, Math.max(22, (width * height) / 20000))), spawnFaller);
+    };
+
+    const step = (f: Flake, dt: number) => {
+      f.phase += dt * f.sway;
+      f.y += f.speed * dt;
+      f.x += (f.drift + Math.sin(f.phase) * (f.band ? 6 : 14)) * dt;
+      f.angle += f.spin * dt;
+      if (f.x < -20) f.x = width + 20;
+      else if (f.x > width + 20) f.x = -20;
+    };
+
+    const render = (f: Flake) => {
+      let alpha = f.alpha;
+      if (f.band && f.y > f.fadeFrom) {
+        alpha *= Math.max(0, 1 - (f.y - f.fadeFrom) / (f.fadeTo - f.fadeFrom));
+      }
+      if (alpha <= 0.01) return;
+      ctx.globalAlpha = alpha;
+      const s = f.size / 0.76; // the drawn shape spans ~76% of its sprite box
+      if (f.angle) {
+        const cos = Math.cos(f.angle) * dpr;
+        const sin = Math.sin(f.angle) * dpr;
+        ctx.setTransform(cos, sin, -sin, cos, f.x * dpr, f.y * dpr);
+        ctx.drawImage(sprites[f.shape], -s / 2, -s / 2, s, s);
+      } else {
+        ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+        ctx.drawImage(sprites[f.shape], f.x - s / 2, f.y - s / 2, s, s);
+      }
     };
 
     const draw = (time: number) => {
@@ -222,32 +303,18 @@ export function Snowfall() {
       last = time;
       ctx.setTransform(1, 0, 0, 1, 0, 0);
       ctx.clearRect(0, 0, canvas.width, canvas.height);
-      const dpr = canvas.width / (width || 1);
-      for (const f of flakes) {
-        f.phase += dt * f.sway;
-        f.y += f.speed * dt;
-        f.x += (f.drift + Math.sin(f.phase) * 16) * dt;
-        f.angle += f.spin * dt;
-        if (f.y - f.size > height) Object.assign(f, spawn(false));
-        if (f.x < -20) f.x = width + 20;
-        else if (f.x > width + 20) f.x = -20;
-
-        let alpha = f.alpha;
-        if (f.kind === 'sparkle')
-          alpha *= 0.35 + 0.65 * Math.abs(Math.sin((time / 1000) * f.twinkle + f.phase));
-        ctx.globalAlpha = alpha;
-        const s = f.kind === 'dot' ? f.size * 2.2 : f.size * 2;
-        if (f.kind === 'dot') {
-          ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-          ctx.drawImage(sprites.dot, f.x - s / 2, f.y - s / 2, s, s);
-        } else {
-          const cos = Math.cos(f.angle) * dpr;
-          const sin = Math.sin(f.angle) * dpr;
-          ctx.setTransform(cos, sin, -sin, cos, f.x * dpr, f.y * dpr);
-          ctx.drawImage(sprites[f.kind], -s / 2, -s / 2, s, s);
-        }
+      for (let i = 0; i < fallers.length; i++) {
+        const f = fallers[i];
+        step(f, dt);
+        if (f.y - f.size > height) fallers[i] = spawnFaller(false);
+        else render(f);
       }
-      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      for (let i = 0; i < band.length; i++) {
+        const f = band[i];
+        step(f, dt);
+        if (f.y > f.fadeTo) band[i] = spawnBand(false);
+        else render(f);
+      }
       ctx.globalAlpha = 1;
       frame = requestAnimationFrame(draw);
     };
@@ -264,7 +331,8 @@ export function Snowfall() {
     const sync = () => {
       if (motion.matches) {
         stop();
-        ctx.clearRect(0, 0, width, height);
+        ctx.setTransform(1, 0, 0, 1, 0, 0);
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
       } else if (document.hidden) stop();
       else start();
     };
