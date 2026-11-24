@@ -20,6 +20,18 @@ const SEASON_START = { month: 11, day: 15 };
 const SEASON_END = { month: 1, day: 6 };
 const HIDDEN_ON = ['/manage'];
 
+// Positioning lives inline so the overlay never depends on the global stylesheet
+// (the production CSS bundle shipped without the .snowfall rule).
+const OVERLAY_STYLE: React.CSSProperties = {
+  position: 'fixed',
+  inset: 0,
+  width: '100%',
+  height: '100%',
+  zIndex: 45,
+  pointerEvents: 'none',
+  userSelect: 'none',
+};
+
 function inSeason(now: Date) {
   const value = (now.getMonth() + 1) * 100 + now.getDate();
   const start = SEASON_START.month * 100 + SEASON_START.day;
@@ -152,5 +164,5 @@ export function Snowfall() {
   }, [hidden]);
 
   if (hidden) return null;
-  return <canvas ref={canvasRef} className="snowfall" aria-hidden="true" />;
+  return <canvas ref={canvasRef} className="snowfall" style={OVERLAY_STYLE} aria-hidden="true" />;
 }
