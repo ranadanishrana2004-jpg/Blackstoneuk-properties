@@ -235,7 +235,7 @@ export function Snowfall() {
     // Small white flakes that fall gently down the whole page.
     const spawnFaller = (initial: boolean): Flake => {
       const depth = Math.random();
-      const size = 2.5 + depth * 4.5;
+      const size = 3 + depth * 5;
       return {
         shape: 'speck',
         band: false,
@@ -265,9 +265,9 @@ export function Snowfall() {
       height = window.innerHeight;
       canvas.width = Math.round(width * dpr);
       canvas.height = Math.round(height * dpr);
-      // About 55 band flakes + 40 fallers on a phone, up to 200 + 120 on a wide desktop.
-      fill(band, Math.round(Math.min(200, Math.max(50, width / 7))), spawnBand);
-      fill(fallers, Math.round(Math.min(120, Math.max(40, (width * height) / 10000))), spawnFaller);
+      // About 60 band flakes + 80 fallers on a phone, up to 240 + 250 on a wide desktop.
+      fill(band, Math.round(Math.min(240, Math.max(60, width / 6))), spawnBand);
+      fill(fallers, Math.round(Math.min(250, Math.max(80, (width * height) / 4500))), spawnFaller);
     };
 
     const step = (f: Flake, dt: number) => {
