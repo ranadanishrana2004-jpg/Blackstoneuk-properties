@@ -220,7 +220,7 @@ export function Snowfall() {
         // Start biased to the very top so the band looks densest at the edge.
         y: initial ? Math.pow(Math.random(), 1.8) * reach - size : -size - Math.random() * 30,
         size,
-        speed: 6 + Math.random() * 14,
+        speed: 10 + Math.random() * 20,
         drift: (Math.random() - 0.5) * 6,
         phase: Math.random() * Math.PI * 2,
         sway: 0.3 + Math.random() * 0.6,
@@ -242,7 +242,7 @@ export function Snowfall() {
         x: Math.random() * width,
         y: initial ? Math.random() * height : -size - Math.random() * 40,
         size,
-        speed: 28 + depth * 42,
+        speed: 45 + depth * 65,
         drift: (Math.random() - 0.5) * 12,
         phase: Math.random() * Math.PI * 2,
         sway: 0.4 + Math.random() * 0.8,
@@ -265,9 +265,9 @@ export function Snowfall() {
       height = window.innerHeight;
       canvas.width = Math.round(width * dpr);
       canvas.height = Math.round(height * dpr);
-      // About 50 band flakes + 25 fallers on a phone, up to 170 + 60 on a wide desktop.
-      fill(band, Math.round(Math.min(170, Math.max(45, width / 8))), spawnBand);
-      fill(fallers, Math.round(Math.min(60, Math.max(22, (width * height) / 20000))), spawnFaller);
+      // About 55 band flakes + 40 fallers on a phone, up to 200 + 120 on a wide desktop.
+      fill(band, Math.round(Math.min(200, Math.max(50, width / 7))), spawnBand);
+      fill(fallers, Math.round(Math.min(120, Math.max(40, (width * height) / 10000))), spawnFaller);
     };
 
     const step = (f: Flake, dt: number) => {
